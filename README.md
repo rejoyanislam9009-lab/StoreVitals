@@ -1,10 +1,10 @@
 # StoreCheckup
 
-StoreCheckup is a read-only WooCommerce store health and diagnostics plugin prepared for WordPress.org review.
+StoreCheckup is a read-only WooCommerce store health and diagnostics plugin prepared for WordPress.org distribution.
 
-## Release candidate 1.0.0
+## Version 1.0.0
 
-The release candidate provides a responsive Store Health Dashboard covering catalog, inventory, checkout, payments, shipping, orders, email configuration, HPOS, Action Scheduler, and WordPress/PHP/WooCommerce environment signals.
+StoreCheckup provides a responsive Store Health Dashboard covering catalog, inventory, checkout, payments, shipping, orders, email configuration, HPOS, Action Scheduler, and WordPress/PHP/WooCommerce environment signals.
 
 ### Safety model
 
