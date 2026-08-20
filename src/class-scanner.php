@@ -48,13 +48,13 @@ final class Scanner {
 		}
 
 		$payload = array(
-			'score'          => $this->score( $results ),
-			'counts'         => $this->status_counts( $results ),
-			'area_scores'    => $this->area_scores( $results ),
-			'results'        => $results,
-			'scanned_at'     => time(),
-			'duration_ms'    => max( 1, (int) round( ( microtime( true ) - $started ) * 1000 ) ),
-			'check_count'    => count( $results ),
+			'score'        => $this->score( $results ),
+			'counts'       => $this->status_counts( $results ),
+			'area_scores'  => $this->area_scores( $results ),
+			'results'      => $results,
+			'scanned_at'   => time(),
+			'duration_ms'  => max( 1, (int) round( ( microtime( true ) - $started ) * 1000 ) ),
+			'check_count'  => count( $results ),
 			'plugin_version' => STOREVITALS_VERSION,
 		);
 
