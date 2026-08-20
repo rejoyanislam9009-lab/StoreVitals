@@ -2,10 +2,10 @@
 /**
  * Scanner coordinator.
  *
- * @package StoreVitals
+ * @package StoreCheckup
  */
 
-namespace StoreVitals;
+namespace StoreCheckup;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -55,7 +55,7 @@ final class Scanner {
 			'scanned_at'   => time(),
 			'duration_ms'  => max( 1, (int) round( ( microtime( true ) - $started ) * 1000 ) ),
 			'check_count'  => count( $results ),
-			'plugin_version' => STOREVITALS_VERSION,
+			'plugin_version' => STORECHECKUP_VERSION,
 		);
 
 		set_transient( $key, $payload, self::CACHE_TTL );
@@ -69,7 +69,7 @@ final class Scanner {
 	}
 
 	private function cache_key() {
-		return 'storevitals_scan_' . get_current_blog_id() . '_' . get_current_user_id();
+		return 'storecheckup_scan_' . get_current_blog_id() . '_' . get_current_user_id();
 	}
 
 	private function score( array $results ) {

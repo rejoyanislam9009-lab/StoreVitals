@@ -1,18 +1,12 @@
 # Changelog
 
-## 1.1.0
+## 1.0.0 - Release candidate
 
-- Added a responsive application header with Overview, Diagnostics, Catalog, Operations, System, History, and Reports sections.
-- Redesigned the health dashboard with a responsive banner, score progress, area cards, and priority summary.
-- Expanded product diagnostics for variations, downloadable products, external products, duplicate SKUs, draft/pending items, and catalog completeness.
-- Expanded inventory diagnostics with low-stock, negative-stock, backorder, and global stock-management signals.
-- Added stale pending-payment and on-hold order checks plus cancelled/refunded order summaries.
-- Added base location, checkout endpoints, transactional email, tax, coupon, and guest-checkout diagnostics.
-- Added PHP, WordPress, cron, uploads, debug-display, environment, and object-cache checks.
-- Added overdue Action Scheduler checks.
-- Added local bounded score history, JSON export, and print-friendly reporting.
-- Kept the plugin read-only and preserved bounded scans.
-
-## 1.0.0
-
-- Initial diagnostic development release.
+- Responsive WooCommerce-submenu health dashboard and section navigation.
+- Overall and per-area health scoring.
+- Bounded product, variation, and inventory diagnostics.
+- Checkout, payment, shipping, email, order, HPOS, Action Scheduler, and system checks.
+- Local 30-entry summary history with score-change context.
+- CSV, JSON, and print-friendly reports.
+- Site-timezone-aware display and spreadsheet-safe CSV output.
+- No telemetry, external scan service, or automatic store-data modification.

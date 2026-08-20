@@ -1,5 +1,7 @@
 # Security
 
-StoreVitals is designed as a read-only diagnostic plugin. State-changing admin actions such as fresh scans, history deletion, and report exports require the `manage_woocommerce` capability and WordPress nonces.
+StoreCheckup 1.0 is diagnostic-first and does not automatically modify WooCommerce business data.
 
-Please report security issues privately to the project maintainer rather than posting exploit details publicly.
+State-changing admin actions require the `manage_woocommerce` capability and WordPress nonce verification. Exports require the same authorization boundary. Output shown in the admin interface is escaped for its output context.
+
+The plugin contains no telemetry, remote code loading, or external scan service.

@@ -1,12 +1,12 @@
 <?php
 /**
- * Uninstall StoreVitals.
+ * Uninstall StoreCheckup.
  *
- * @package StoreVitals
+ * @package StoreCheckup
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-delete_option( 'storevitals_scan_history' );
+delete_option( 'storecheckup_scan_history' );

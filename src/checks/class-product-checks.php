@@ -2,12 +2,12 @@
 /**
  * Bounded catalog and inventory checks.
  *
- * @package StoreVitals
+ * @package StoreCheckup
  */
 
-namespace StoreVitals\Checks;
+namespace StoreCheckup\Checks;
 
-use StoreVitals\Result;
+use StoreCheckup\Result;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -152,9 +152,9 @@ final class Product_Checks {
 				'products-scanned',
 				'products',
 				Result::INFO,
-				__( 'Catalog scan completed', 'storevitals' ),
+				__( 'Catalog scan completed', 'storecheckup' ),
 				sprintf(
-					__( 'Scanned %1$d products and %2$d variations. Product scans are capped at %3$d products and %4$d variations per request.', 'storevitals' ),
+					__( 'Scanned %1$d products and %2$d variations. Product scans are capped at %3$d products and %4$d variations per request.', 'storecheckup' ),
 					$counts['scanned'],
 					$counts['variations_scanned'],
 					self::MAX_PRODUCTS,
@@ -162,29 +162,65 @@ final class Product_Checks {
 				),
 				$counts['scanned']
 			),
-			$this->issue( 'missing-price', 'products', __( 'Products without a price', 'storevitals' ), $counts['missing_price'], Result::CRITICAL, __( 'Non-variable products without a price may be unavailable for normal purchase flows.', 'storevitals' ), $products_url ),
-			$this->issue( 'variation-missing-price', 'products', __( 'Variations without a price', 'storevitals' ), $counts['variation_missing_price'], Result::CRITICAL, __( 'A purchasable variation normally needs a price.', 'storevitals' ), $products_url ),
-			$this->issue( 'empty-variable-products', 'products', __( 'Variable products without variations', 'storevitals' ), $counts['variable_no_children'], Result::CRITICAL, __( 'A variable product with no variations cannot present normal variation choices.', 'storevitals' ), $products_url ),
-			$this->issue( 'download-missing-files', 'products', __( 'Downloadable products without files', 'storevitals' ), $counts['download_missing_files'], Result::CRITICAL, __( 'A downloadable product should normally have at least one downloadable file assigned.', 'storevitals' ), $products_url ),
-			$this->issue( 'external-missing-url', 'products', __( 'External products without a product URL', 'storevitals' ), $counts['external_missing_url'], Result::CRITICAL, __( 'External/affiliate products need a destination URL to work as intended.', 'storevitals' ), $products_url ),
-			$this->issue( 'missing-image', 'products', __( 'Products without a featured image', 'storevitals' ), $counts['missing_image'], Result::WARNING, __( 'Product imagery is a major part of catalog usability.', 'storevitals' ), $products_url ),
-			$this->issue( 'uncategorized-products', 'products', __( 'Products without a category', 'storevitals' ), $counts['uncategorized'], Result::WARNING, __( 'Categories help customers browse and managers maintain the catalog.', 'storevitals' ), $products_url ),
-			$this->issue( 'duplicate-sku', 'products', __( 'Duplicate SKUs in the bounded scan', 'storevitals' ), $counts['duplicate_sku'], Result::WARNING, __( 'Duplicate SKUs can confuse inventory workflows and external integrations.', 'storevitals' ), $products_url ),
-			$this->issue( 'missing-sku', 'products', __( 'Products without an SKU', 'storevitals' ), $counts['missing_sku'], Result::INFO, __( 'SKUs are optional but useful for inventory and integrations.', 'storevitals' ), $products_url ),
-			$this->issue( 'missing-short-description', 'products', __( 'Products without a short description', 'storevitals' ), $counts['missing_short_desc'], Result::INFO, __( 'A concise product summary can improve catalog consistency.', 'storevitals' ), $products_url ),
-			$this->issue( 'draft-pending-products', 'products', __( 'Draft or pending products', 'storevitals' ), $counts['draft_pending'], Result::INFO, __( 'Review unfinished catalog items periodically so stale drafts do not accumulate.', 'storevitals' ), $products_url ),
-			$this->issue( 'negative-stock', 'inventory', __( 'Products with negative stock quantities', 'storevitals' ), $counts['negative_stock'], Result::CRITICAL, __( 'Negative inventory can indicate overselling, imports, or stock synchronization problems.', 'storevitals' ), $stock_url ),
-			$this->issue( 'low-stock', 'inventory', __( 'Low-stock products', 'storevitals' ), $counts['low_stock'], Result::WARNING, __( 'These products are at or below their configured low-stock threshold.', 'storevitals' ), $stock_url ),
-			new Result( 'out-of-stock', 'inventory', Result::INFO, __( 'Out-of-stock products', 'storevitals' ), sprintf( _n( '%d scanned product is currently out of stock.', '%d scanned products are currently out of stock.', $counts['out_of_stock'], 'storevitals' ), $counts['out_of_stock'] ), $counts['out_of_stock'], $stock_url, __( 'Review stock', 'storevitals' ) ),
-			new Result( 'backorders-enabled', 'inventory', Result::INFO, __( 'Products allowing backorders', 'storevitals' ), sprintf( _n( '%d scanned product allows backorders.', '%d scanned products allow backorders.', $counts['backorders'], 'storevitals' ), $counts['backorders'] ), $counts['backorders'], $stock_url, __( 'Review stock', 'storevitals' ) ),
+			$this->issue( 'missing-price', 'products', __( 'Products without a price', 'storecheckup' ), $counts['missing_price'], Result::CRITICAL, __( 'Non-variable products without a price may be unavailable for normal purchase flows.', 'storecheckup' ), $products_url ),
+			$this->issue( 'variation-missing-price', 'products', __( 'Variations without a price', 'storecheckup' ), $counts['variation_missing_price'], Result::CRITICAL, __( 'A purchasable variation normally needs a price.', 'storecheckup' ), $products_url ),
+			$this->issue( 'empty-variable-products', 'products', __( 'Variable products without variations', 'storecheckup' ), $counts['variable_no_children'], Result::CRITICAL, __( 'A variable product with no variations cannot present normal variation choices.', 'storecheckup' ), $products_url ),
+			$this->issue( 'download-missing-files', 'products', __( 'Downloadable products without files', 'storecheckup' ), $counts['download_missing_files'], Result::CRITICAL, __( 'A downloadable product should normally have at least one downloadable file assigned.', 'storecheckup' ), $products_url ),
+			$this->issue( 'external-missing-url', 'products', __( 'External products without a product URL', 'storecheckup' ), $counts['external_missing_url'], Result::CRITICAL, __( 'External/affiliate products need a destination URL to work as intended.', 'storecheckup' ), $products_url ),
+			$this->issue( 'missing-image', 'products', __( 'Products without a featured image', 'storecheckup' ), $counts['missing_image'], Result::WARNING, __( 'Product imagery is a major part of catalog usability.', 'storecheckup' ), $products_url ),
+			$this->issue( 'uncategorized-products', 'products', __( 'Products without a category', 'storecheckup' ), $counts['uncategorized'], Result::WARNING, __( 'Categories help customers browse and managers maintain the catalog.', 'storecheckup' ), $products_url ),
+			$this->issue( 'duplicate-sku', 'products', __( 'Duplicate SKUs in the bounded scan', 'storecheckup' ), $counts['duplicate_sku'], Result::WARNING, __( 'Duplicate SKUs can confuse inventory workflows and external integrations.', 'storecheckup' ), $products_url ),
+			$this->issue( 'missing-sku', 'products', __( 'Products without an SKU', 'storecheckup' ), $counts['missing_sku'], Result::INFO, __( 'SKUs are optional but useful for inventory and integrations.', 'storecheckup' ), $products_url ),
+			$this->issue( 'missing-short-description', 'products', __( 'Products without a short description', 'storecheckup' ), $counts['missing_short_desc'], Result::INFO, __( 'A concise product summary can improve catalog consistency.', 'storecheckup' ), $products_url ),
+			$this->issue( 'draft-pending-products', 'products', __( 'Draft or pending products', 'storecheckup' ), $counts['draft_pending'], Result::INFO, __( 'Review unfinished catalog items periodically so stale drafts do not accumulate.', 'storecheckup' ), $products_url ),
+			$this->issue( 'negative-stock', 'inventory', __( 'Products with negative stock quantities', 'storecheckup' ), $counts['negative_stock'], Result::CRITICAL, __( 'Negative inventory can indicate overselling, imports, or stock synchronization problems.', 'storecheckup' ), $stock_url ),
+			$this->issue( 'low-stock', 'inventory', __( 'Low-stock products', 'storecheckup' ), $counts['low_stock'], Result::WARNING, __( 'These products are at or below their configured low-stock threshold.', 'storecheckup' ), $stock_url ),
+			new Result(
+				'out-of-stock',
+				'inventory',
+				Result::INFO,
+				__( 'Out-of-stock products', 'storecheckup' ),
+				sprintf( _n( '%d scanned product is currently out of stock.', '%d scanned products are currently out of stock.', $counts['out_of_stock'], 'storecheckup' ), $counts['out_of_stock'] ),
+				$counts['out_of_stock'],
+				$stock_url,
+				__( 'Review stock', 'storecheckup' )
+			),
+			new Result(
+				'backorders-enabled',
+				'inventory',
+				Result::INFO,
+				__( 'Products allowing backorders', 'storecheckup' ),
+				sprintf( _n( '%d scanned product allows backorders.', '%d scanned products allow backorders.', $counts['backorders'], 'storecheckup' ), $counts['backorders'] ),
+				$counts['backorders'],
+				$stock_url,
+				__( 'Review stock', 'storecheckup' )
+			),
 		);
 	}
 
 	private function issue( $id, $area, $title, $count, $severity, $description, $url ) {
 		if ( $count > 0 ) {
-			return new Result( $id, $area, $severity, $title, sprintf( _n( '%1$d affected item. %2$s', '%1$d affected items. %2$s', $count, 'storevitals' ), $count, $description ), $count, $url, 'inventory' === $area ? __( 'Review inventory', 'storevitals' ) : __( 'Open products', 'storevitals' ) );
+			return new Result(
+				$id,
+				$area,
+				$severity,
+				$title,
+				sprintf( _n( '%1$d affected item. %2$s', '%1$d affected items. %2$s', $count, 'storecheckup' ), $count, $description ),
+				$count,
+				$url,
+				'inventory' === $area ? __( 'Review inventory', 'storecheckup' ) : __( 'Open products', 'storecheckup' )
+			);
 		}
 
-		return new Result( $id, $area, Result::PASSED, $title, __( 'No affected items were found in the bounded scan.', 'storevitals' ), 0, $url, 'inventory' === $area ? __( 'Review inventory', 'storevitals' ) : __( 'Open products', 'storevitals' ) );
+		return new Result(
+			$id,
+			$area,
+			Result::PASSED,
+			$title,
+			__( 'No affected items were found in the bounded scan.', 'storecheckup' ),
+			0,
+			$url,
+			'inventory' === $area ? __( 'Review inventory', 'storecheckup' ) : __( 'Open products', 'storecheckup' )
+		);
 	}
 }

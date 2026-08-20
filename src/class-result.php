@@ -2,10 +2,10 @@
 /**
  * Health result value object.
  *
- * @package StoreVitals
+ * @package StoreCheckup
  */
 
-namespace StoreVitals;
+namespace StoreCheckup;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

@@ -1,0 +1,40 @@
+name: Release checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "release/**"
+      - "feature/storecheckup/**"
+
+permissions:
+  contents: read
+
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ["7.4", "8.1", "8.3"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: PHP syntax
+        run: find . -type f -name "*.php" -not -path "./.git/*" -print0 | xargs -0 -n1 php -l
+
+  plugin-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build WordPress.org package tree
+        run: |
+          mkdir -p build/storecheckup
+          cp storecheckup.php uninstall.php readme.txt LICENSE build/storecheckup/
+          cp -R assets src languages build/storecheckup/
+      - name: Official WordPress Plugin Check
+        uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: ./build/storecheckup

@@ -1,0 +1,89 @@
+.storecheckup-result p{margin:5px 0 0;color:#50575e;line-height:1.5}
+.storecheckup-area-label{display:inline-block;margin-top:7px;font-size:10px;color:#787c82;text-transform:uppercase;letter-spacing:.05em}
+.storecheckup-result-action{display:flex;justify-content:flex-end;align-items:center}
+.storecheckup-result-action .button{white-space:nowrap}
+.storecheckup-empty{text-align:center;padding:24px 12px;color:var(--sv-muted)}
+.storecheckup-empty .dashicons{width:34px;height:34px;font-size:34px;color:#8c8f94}
+.storecheckup-empty h3{margin:8px 0 5px;color:var(--sv-text);font-size:15px}
+.storecheckup-empty p{margin:0}
+.storecheckup-empty-card{background:#fff;border:1px dashed #c3c4c7;border-radius:10px;padding:40px 20px}
+.storecheckup-table-wrap{overflow:auto;background:#fff;border:1px solid var(--sv-border);border-radius:10px}
+.storecheckup-history-table{border:0;box-shadow:none}
+.storecheckup-history-table td,.storecheckup-history-table th{padding:12px 14px;vertical-align:middle}
+.storecheckup-history-table progress{min-width:150px;max-width:260px;height:7px}
+.storecheckup-report-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.storecheckup-report-card{display:flex;flex-direction:column;align-items:flex-start;min-height:190px}
+.storecheckup-report-card>.dashicons{width:34px;height:34px;font-size:34px;color:var(--sv-primary);margin-bottom:10px}
+.storecheckup-report-card h3{margin:0 0 7px;font-size:16px}
+.storecheckup-report-card p{margin:0 0 16px;color:var(--sv-muted);line-height:1.55;flex:1}
+.storecheckup-report-meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin:-2px 0 12px;color:var(--sv-muted);font-size:12px}
+.storecheckup-report-score{font-size:20px}
+.storecheckup-print-report{margin-top:4px}
+.storecheckup-main>.storecheckup-section>.storecheckup-results{margin-top:0}
+.storecheckup-wrap .notice{margin:0 0 16px}
+@media(max-width:1100px){
+	.storecheckup-area-grid{grid-template-columns:repeat(3,minmax(150px,1fr))}
+	.storecheckup-summary-grid{grid-template-columns:repeat(2,minmax(130px,1fr))}
+	.storecheckup-filterbar{grid-template-columns:minmax(220px,1fr) minmax(140px,180px) minmax(140px,180px);}
+	.storecheckup-filterbar .button{justify-self:start}
+	.storecheckup-report-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:900px){
+	.storecheckup-health-banner{grid-template-columns:1fr;gap:20px}
+	.storecheckup-score-panel{max-width:340px}
+	.storecheckup-area-grid{grid-template-columns:repeat(2,minmax(150px,1fr))}
+	.storecheckup-two-column{grid-template-columns:1fr}
+	.storecheckup-result{grid-template-columns:94px minmax(0,1fr)}
+	.storecheckup-result-action{grid-column:2;justify-content:flex-start}
+}
+@media(max-width:782px){
+	.storecheckup-wrap{margin:10px 10px 0 0;max-width:none}
+	.storecheckup-app-header{border-radius:10px 10px 0 0;margin-bottom:14px}
+	.storecheckup-brand-row{padding:16px;align-items:flex-start;flex-direction:column;gap:14px}
+	.storecheckup-actions{width:100%;justify-content:flex-start}
+	.storecheckup-actions .button{flex:1;justify-content:center;min-width:130px}
+	.storecheckup-tabs{padding:0 6px;-webkit-overflow-scrolling:touch}
+	.storecheckup-tab{padding:0 11px;min-height:44px}
+	.storecheckup-health-banner{padding:20px;border-radius:12px}
+	.storecheckup-score-number strong{font-size:48px}
+	.storecheckup-banner-content h2{font-size:20px}
+	.storecheckup-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+	.storecheckup-area-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+	.storecheckup-area-card{padding:12px}
+	.storecheckup-section-heading{align-items:flex-start;flex-direction:column;gap:8px}
+	.storecheckup-section-heading-stacked{align-items:flex-start}
+	.storecheckup-filterbar{grid-template-columns:1fr 1fr}
+	.storecheckup-filterbar label:first-of-type{grid-column:1/-1}
+	.storecheckup-filterbar .button{width:100%;justify-content:center}
+	.storecheckup-result{grid-template-columns:1fr;gap:9px;padding:14px}
+	.storecheckup-result-action{grid-column:1;justify-content:flex-start}
+	.storecheckup-result-action .button{width:100%;text-align:center}
+	.storecheckup-result-indicator{order:-1}
+	.storecheckup-report-grid{grid-template-columns:1fr}
+	.storecheckup-report-card{min-height:0}
+	.storecheckup-history-table td,.storecheckup-history-table th{white-space:nowrap}
+}
+@media(max-width:480px){
+	.storecheckup-brand-mark{width:42px;height:42px;flex-basis:42px;border-radius:12px}
+	.storecheckup-title-line h1{font-size:22px}
+	.storecheckup-brand p{font-size:12px}
+	.storecheckup-actions{display:grid;grid-template-columns:1fr 1fr}
+	.storecheckup-summary-grid{grid-template-columns:1fr 1fr}
+	.storecheckup-summary-card{padding:10px}
+	.storecheckup-area-grid{grid-template-columns:1fr}
+	.storecheckup-filterbar{grid-template-columns:1fr}
+	.storecheckup-filterbar label:first-of-type{grid-column:auto}
+	.storecheckup-compact-result strong{white-space:normal}
+}
+@media print{
+	#adminmenumain,#wpadminbar,#screen-meta-links,.storecheckup-app-header,.storecheckup-actions,.storecheckup-report-grid,.notice,.storecheckup-result-action,.update-nag{display:none!important}
+	html.wp-toolbar{padding-top:0!important}
+	#wpcontent,#wpfooter{margin-left:0!important}
+	#wpbody-content{padding-bottom:0!important}
+	.storecheckup-wrap{max-width:none;margin:0!important}
+	.storecheckup-main{display:block}
+	.storecheckup-section:not(.storecheckup-print-report){display:none!important}
+	.storecheckup-print-report{display:block!important}
+	.storecheckup-result{break-inside:avoid;box-shadow:none}
+	.storecheckup-section-heading{margin-top:0}
+}

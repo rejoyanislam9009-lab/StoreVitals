@@ -1,40 +1,30 @@
-# StoreVitals
+# StoreCheckup
 
-StoreVitals is a read-only WooCommerce store health dashboard. It surfaces bounded catalog, inventory, checkout, payment, shipping, order, scheduled-action, email, and WordPress environment diagnostics without automatically changing store data.
+StoreCheckup is a read-only WooCommerce store health and diagnostics plugin prepared for WordPress.org review.
 
-## Development release
+## Release candidate 1.0.0
 
-**1.1.0** expands the initial diagnostic engine with a responsive application header, health banner, section navigation, deeper store checks, local scan history, JSON export, and print-friendly reporting.
+The release candidate provides a responsive Store Health Dashboard covering catalog, inventory, checkout, payments, shipping, orders, email configuration, HPOS, Action Scheduler, and WordPress/PHP/WooCommerce environment signals.
 
-## Main areas
+### Safety model
 
-- Overview health score and area scores
-- Product and variation diagnostics
-- Inventory signals
-- Checkout and account configuration
-- Payments and shipping
-- HPOS-safe order status summaries
-- Action Scheduler signals
-- WooCommerce email configuration
-- WordPress/PHP/WooCommerce environment checks
-- Local score history (30 summary snapshots maximum)
-- CSV, JSON, and print reports
+- No automatic product, order, stock, payment, shipping, or customer-data mutations.
+- No telemetry or external scan service.
+- Admin mutations such as rescanning, clearing local history, and exports require WooCommerce-management capability and WordPress nonces.
+- Catalog work is bounded to 1,000 products and 2,000 variations per scan.
+- Local history contains summary scores/counts only and is capped at 30 entries.
 
-## Safety model
-
-StoreVitals 1.1 is diagnostic-first. It does not automatically edit products, change stock, alter orders, issue refunds, change payment settings, or repair configuration. It sends no scan telemetry to an external service.
-
-Catalog scans are intentionally bounded to 1,000 products and 2,000 variations per request.
-
-## Requirements
+### Compatibility target
 
 - WordPress 6.9+
 - PHP 7.4+
 - WooCommerce 10.8+
+- Tested on WordPress 7.1 and WooCommerce 11.0.1 during development.
+- HPOS compatibility declared.
 
-## Development workflow
+## Release workflow
 
-GitHub is the development source. WordPress.org should be treated as the stable distribution channel only after the final public brand/slug and release package pass the project review gates.
+GitHub is the development source. The WordPress.org ZIP is built from an allowlisted runtime package and excludes development-only files. GitHub Actions run PHP syntax validation and the official WordPress Plugin Check action on release branches and pull requests.
 
 ## License
 

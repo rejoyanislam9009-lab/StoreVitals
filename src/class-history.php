@@ -2,17 +2,17 @@
 /**
  * Local scan history.
  *
- * @package StoreVitals
+ * @package StoreCheckup
  */
 
-namespace StoreVitals;
+namespace StoreCheckup;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 final class History {
-	const OPTION_KEY  = 'storevitals_scan_history';
+	const OPTION_KEY  = 'storecheckup_scan_history';
 	const MAX_ENTRIES = 30;
 
 	public function add( array $scan ) {

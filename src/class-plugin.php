@@ -2,10 +2,10 @@
 /**
  * Plugin bootstrap.
  *
- * @package StoreVitals
+ * @package StoreCheckup
  */
 
-namespace StoreVitals;
+namespace StoreCheckup;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,7 +24,7 @@ final class Plugin {
 	private function __construct() {}
 
 	public function boot() {
-		load_plugin_textdomain( 'storevitals', false, dirname( plugin_basename( STOREVITALS_FILE ) ) . '/languages' );
+		load_plugin_textdomain( 'storecheckup', false, dirname( plugin_basename( STORECHECKUP_FILE ) ) . '/languages' );
 
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			add_action( 'admin_notices', array( $this, 'woocommerce_required_notice' ) );
@@ -46,7 +46,7 @@ final class Plugin {
 			return;
 		}
 		?>
-		<div class="notice notice-warning"><p><?php echo esc_html__( 'StoreVitals requires WooCommerce to be installed and active.', 'storevitals' ); ?></p></div>
+		<div class="notice notice-warning"><p><?php echo esc_html__( 'StoreCheckup requires WooCommerce to be installed and active.', 'storecheckup' ); ?></p></div>
 		<?php
 	}
 }
