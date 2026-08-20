@@ -24,8 +24,6 @@ final class Plugin {
 	private function __construct() {}
 
 	public function boot() {
-		load_plugin_textdomain( 'storecheckup', false, dirname( plugin_basename( STORECHECKUP_FILE ) ) . '/languages' );
-
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			add_action( 'admin_notices', array( $this, 'woocommerce_required_notice' ) );
 			return;

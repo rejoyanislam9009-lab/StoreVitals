@@ -46,7 +46,6 @@ final class Exporter {
 		foreach ( $scan['results'] as $result ) {
 			$this->write_csv_row( $output, array( $result['area'], $result['status'], $result['title'], $result['count'], $result['message'], $result['action_url'] ) );
 		}
-		fclose( $output );
 		exit;
 	}
 

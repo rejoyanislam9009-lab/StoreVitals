@@ -50,10 +50,15 @@ trait Admin_Presentation {
 	}
 
 	private function render_notices() {
-		if ( isset( $_GET['rescanned'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['rescanned'] ) ) ) {
-			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Fresh StoreCheckup scan completed.', 'storecheckup' ) . '</p></div>';
+		$notice_key = 'storecheckup_notice_' . get_current_user_id();
+		$notice     = get_transient( $notice_key );
+		if ( ! $notice ) {
+			return;
 		}
-		if ( isset( $_GET['history_cleared'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['history_cleared'] ) ) ) {
+		delete_transient( $notice_key );
+		if ( 'rescanned' === $notice ) {
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Fresh StoreCheckup scan completed.', 'storecheckup' ) . '</p></div>';
+		} elseif ( 'history_cleared' === $notice ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Local StoreCheckup scan history was cleared.', 'storecheckup' ) . '</p></div>';
 		}
 	}
@@ -128,6 +133,7 @@ trait Admin_Presentation {
 				<dl class="storecheckup-definition-list">
 					<div><dt><?php echo esc_html__( 'Checks', 'storecheckup' ); ?></dt><dd><?php echo esc_html( (string) $scan['check_count'] ); ?></dd></div>
 					<div><dt><?php echo esc_html__( 'Scan time', 'storecheckup' ); ?></dt><dd><?php echo esc_html( number_format_i18n( $scan['duration_ms'] ) . ' ms' ); ?></dd></div>
+					<?php /* translators: 1: localized scan date/time, 2: human-readable elapsed time. */ ?>
 					<div><dt><?php echo esc_html__( 'Last scan', 'storecheckup' ); ?></dt><dd><?php echo esc_html( sprintf( __( '%1$s (%2$s ago)', 'storecheckup' ), wp_date( 'M j, Y g:i a T', $scan['scanned_at'] ), human_time_diff( $scan['scanned_at'], time() ) ) ); ?></dd></div>
 					<div><dt><?php echo esc_html__( 'Site timezone', 'storecheckup' ); ?></dt><dd><?php echo esc_html( wp_timezone_string() ); ?></dd></div>
 					<?php if ( null !== $score_delta ) : ?><div><dt><?php echo esc_html__( 'Score change', 'storecheckup' ); ?></dt><dd><?php echo esc_html( ( $score_delta > 0 ? '+' : '' ) . (string) $score_delta ); ?></dd></div><?php endif; ?>

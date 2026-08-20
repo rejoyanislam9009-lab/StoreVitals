@@ -44,7 +44,26 @@ trait Admin_Reports {
 		</section>
 		<section class="storecheckup-section storecheckup-print-report">
 			<div class="storecheckup-section-heading"><div><span class="storecheckup-eyebrow"><?php echo esc_html__( 'Report preview', 'storecheckup' ); ?></span><h2><?php echo esc_html__( 'Current store health snapshot', 'storecheckup' ); ?></h2></div><strong class="storecheckup-report-score"><?php echo esc_html( (string) $scan['score'] . '/100' ); ?></strong></div>
-			<div class="storecheckup-report-meta"><span><?php echo esc_html( sprintf( __( 'Scanned: %s', 'storecheckup' ), wp_date( 'M j, Y g:i a T', $scan['scanned_at'] ) ) ); ?></span><span><?php echo esc_html( sprintf( __( 'Checks: %d', 'storecheckup' ), $scan['check_count'] ) ); ?></span><span><?php echo esc_html( sprintf( __( 'Duration: %d ms', 'storecheckup' ), $scan['duration_ms'] ) ); ?></span></div>
+			<div class="storecheckup-report-meta">
+				<span>
+					<?php
+					/* translators: %s: localized scan date and time. */
+					echo esc_html( sprintf( __( 'Scanned: %s', 'storecheckup' ), wp_date( 'M j, Y g:i a T', $scan['scanned_at'] ) ) );
+					?>
+				</span>
+				<span>
+					<?php
+					/* translators: %d: number of diagnostic checks in the current scan. */
+					echo esc_html( sprintf( __( 'Checks: %d', 'storecheckup' ), $scan['check_count'] ) );
+					?>
+				</span>
+				<span>
+					<?php
+					/* translators: %d: scan duration in milliseconds. */
+					echo esc_html( sprintf( __( 'Duration: %d ms', 'storecheckup' ), $scan['duration_ms'] ) );
+					?>
+				</span>
+			</div>
 			<?php $this->render_results( $scan['results'] ); ?>
 		</section>
 		<?php

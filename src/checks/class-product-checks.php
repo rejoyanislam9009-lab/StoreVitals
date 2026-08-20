@@ -154,6 +154,7 @@ final class Product_Checks {
 				Result::INFO,
 				__( 'Catalog scan completed', 'storecheckup' ),
 				sprintf(
+					/* translators: 1: products scanned, 2: variations scanned, 3: product scan cap, 4: variation scan cap. */
 					__( 'Scanned %1$d products and %2$d variations. Product scans are capped at %3$d products and %4$d variations per request.', 'storecheckup' ),
 					$counts['scanned'],
 					$counts['variations_scanned'],
@@ -180,6 +181,7 @@ final class Product_Checks {
 				'inventory',
 				Result::INFO,
 				__( 'Out-of-stock products', 'storecheckup' ),
+				/* translators: %d: number of scanned products currently out of stock. */
 				sprintf( _n( '%d scanned product is currently out of stock.', '%d scanned products are currently out of stock.', $counts['out_of_stock'], 'storecheckup' ), $counts['out_of_stock'] ),
 				$counts['out_of_stock'],
 				$stock_url,
@@ -190,6 +192,7 @@ final class Product_Checks {
 				'inventory',
 				Result::INFO,
 				__( 'Products allowing backorders', 'storecheckup' ),
+				/* translators: %d: number of scanned products that allow backorders. */
 				sprintf( _n( '%d scanned product allows backorders.', '%d scanned products allow backorders.', $counts['backorders'], 'storecheckup' ), $counts['backorders'] ),
 				$counts['backorders'],
 				$stock_url,
@@ -205,6 +208,7 @@ final class Product_Checks {
 				$area,
 				$severity,
 				$title,
+				/* translators: 1: number of affected products or variations, 2: diagnostic explanation. */
 				sprintf( _n( '%1$d affected item. %2$s', '%1$d affected items. %2$s', $count, 'storecheckup' ), $count, $description ),
 				$count,
 				$url,

@@ -34,6 +34,7 @@ final class Store_Checks {
 	private function currency_check() {
 		$currency = get_woocommerce_currency();
 		if ( $currency ) {
+			/* translators: %s: WooCommerce currency code, for example USD. */
 			return new Result( 'currency', 'store', Result::PASSED, __( 'Store currency is configured', 'storecheckup' ), sprintf( __( 'Current store currency: %s.', 'storecheckup' ), $currency ) );
 		}
 		return new Result( 'currency', 'store', Result::CRITICAL, __( 'Store currency is missing', 'storecheckup' ), __( 'WooCommerce needs a store currency for product prices and checkout.', 'storecheckup' ), 1, admin_url( 'admin.php?page=wc-settings' ), __( 'Open WooCommerce settings', 'storecheckup' ) );
@@ -43,6 +44,7 @@ final class Store_Checks {
 		$country = WC()->countries ? WC()->countries->get_base_country() : '';
 		$city    = trim( (string) get_option( 'woocommerce_store_city' ) );
 		if ( $country && $city ) {
+			/* translators: 1: store city, 2: store country code. */
 			return new Result( 'base-location', 'store', Result::PASSED, __( 'Store base location is configured', 'storecheckup' ), sprintf( __( 'Base location: %1$s, %2$s.', 'storecheckup' ), $city, $country ) );
 		}
 		return new Result( 'base-location', 'store', Result::WARNING, __( 'Store base location needs review', 'storecheckup' ), __( 'A complete base location helps WooCommerce calculate taxes, shipping, and store defaults consistently.', 'storecheckup' ), 1, admin_url( 'admin.php?page=wc-settings' ), __( 'Review store address', 'storecheckup' ) );
@@ -60,8 +62,10 @@ final class Store_Checks {
 			$page_id = absint( get_option( $config[0] ) );
 			$page    = $page_id ? get_post( $page_id ) : null;
 			if ( $page && 'publish' === $page->post_status ) {
+				/* translators: 1: WooCommerce page label, 2: WordPress page ID. */
 				$results[] = new Result( 'page-' . $id, 'checkout', Result::PASSED, sprintf( __( '%s is published', 'storecheckup' ), $config[1] ), sprintf( __( 'Page ID %d is assigned and published.', 'storecheckup' ), $page_id ) );
 			} else {
+				/* translators: %s: WooCommerce page label, such as Cart or Checkout page. */
 				$results[] = new Result( 'page-' . $id, 'checkout', Result::CRITICAL, sprintf( __( '%s needs attention', 'storecheckup' ), $config[1] ), __( 'The assigned page is missing or not published.', 'storecheckup' ), 1, admin_url( 'admin.php?page=wc-settings&tab=advanced' ), __( 'Review page setup', 'storecheckup' ) );
 			}
 		}
@@ -86,6 +90,7 @@ final class Store_Checks {
 		if ( 0 === $missing ) {
 			return new Result( 'checkout-endpoints', 'checkout', Result::PASSED, __( 'Checkout and account endpoints are configured', 'storecheckup' ), __( 'Core WooCommerce checkout and account endpoint slugs are present.', 'storecheckup' ) );
 		}
+		/* translators: %d: number of missing core checkout/account endpoint slugs. */
 		return new Result( 'checkout-endpoints', 'checkout', Result::WARNING, __( 'Checkout or account endpoints need review', 'storecheckup' ), sprintf( _n( '%d core endpoint slug is empty.', '%d core endpoint slugs are empty.', $missing, 'storecheckup' ), $missing ), $missing, admin_url( 'admin.php?page=wc-settings&tab=advanced' ), __( 'Review endpoints', 'storecheckup' ) );
 	}
 
@@ -98,6 +103,7 @@ final class Store_Checks {
 			}
 		}
 		if ( $enabled ) {
+			/* translators: %d: number of enabled payment gateways. */
 			return new Result( 'payments', 'payments', Result::PASSED, __( 'Payment gateways are enabled', 'storecheckup' ), sprintf( _n( '%d gateway is enabled.', '%d gateways are enabled.', $enabled, 'storecheckup' ), $enabled ), $enabled, admin_url( 'admin.php?page=wc-settings&tab=checkout' ), __( 'Review payments', 'storecheckup' ) );
 		}
 		return new Result( 'payments', 'payments', Result::WARNING, __( 'No payment gateway is enabled', 'storecheckup' ), __( 'This can be intentional for free-only stores, but most stores need at least one enabled payment method.', 'storecheckup' ), 0, admin_url( 'admin.php?page=wc-settings&tab=checkout' ), __( 'Configure payments', 'storecheckup' ) );
@@ -120,6 +126,7 @@ final class Store_Checks {
 			}
 		}
 		if ( $enabled ) {
+			/* translators: %d: number of enabled shipping methods. */
 			return new Result( 'shipping', 'shipping', Result::PASSED, __( 'Shipping methods are configured', 'storecheckup' ), sprintf( _n( '%d enabled shipping method was found.', '%d enabled shipping methods were found.', $enabled, 'storecheckup' ), $enabled ), $enabled, admin_url( 'admin.php?page=wc-settings&tab=shipping' ), __( 'Review shipping', 'storecheckup' ) );
 		}
 		return new Result( 'shipping', 'shipping', Result::WARNING, __( 'No enabled shipping method was found', 'storecheckup' ), __( 'This is expected for stores that sell only virtual products. Physical-product stores should review shipping zones.', 'storecheckup' ), 0, admin_url( 'admin.php?page=wc-settings&tab=shipping' ), __( 'Review shipping', 'storecheckup' ) );
@@ -129,6 +136,7 @@ final class Store_Checks {
 		$name  = trim( (string) get_option( 'woocommerce_email_from_name' ) );
 		$email = trim( (string) get_option( 'woocommerce_email_from_address' ) );
 		if ( $name && is_email( $email ) ) {
+			/* translators: 1: WooCommerce email sender name, 2: WooCommerce sender email address. */
 			return new Result( 'email-sender', 'store', Result::PASSED, __( 'WooCommerce email sender is configured', 'storecheckup' ), sprintf( __( 'Sender: %1$s <%2$s>.', 'storecheckup' ), $name, $email ) );
 		}
 		return new Result( 'email-sender', 'store', Result::WARNING, __( 'WooCommerce email sender needs review', 'storecheckup' ), __( 'Set a valid sender name and email address for transactional messages.', 'storecheckup' ), 1, admin_url( 'admin.php?page=wc-settings&tab=email' ), __( 'Review emails', 'storecheckup' ) );
@@ -159,6 +167,7 @@ final class Store_Checks {
 		if ( false === $new_order_enabled ) {
 			return new Result( 'transactional-emails', 'store', Result::WARNING, __( 'New order email is disabled', 'storecheckup' ), __( 'The store manager new-order notification is currently disabled.', 'storecheckup' ), 1, $url, __( 'Review emails', 'storecheckup' ) );
 		}
+		/* translators: 1: number of enabled WooCommerce email notifications, 2: total WooCommerce email notifications. */
 		return new Result( 'transactional-emails', 'store', Result::PASSED, __( 'Transactional email configuration looks active', 'storecheckup' ), sprintf( __( '%1$d of %2$d WooCommerce email notifications are enabled.', 'storecheckup' ), $enabled, $total ), $enabled, $url, __( 'Review emails', 'storecheckup' ) );
 	}
 

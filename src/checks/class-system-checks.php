@@ -48,34 +48,43 @@ final class System_Checks {
 	private function memory_check() {
 		$bytes = defined( 'WP_MEMORY_LIMIT' ) ? wp_convert_hr_to_bytes( WP_MEMORY_LIMIT ) : 0;
 		if ( $bytes >= 134217728 ) {
+			/* translators: %s: configured WordPress memory limit, for example 256M. */
 			return new Result( 'memory', 'system', Result::PASSED, __( 'WordPress memory limit looks healthy', 'storecheckup' ), sprintf( __( 'Configured memory limit: %s.', 'storecheckup' ), WP_MEMORY_LIMIT ) );
 		}
+		/* translators: %s: configured WordPress memory limit, for example 64M. */
 		return new Result( 'memory', 'system', Result::WARNING, __( 'WordPress memory limit is low', 'storecheckup' ), sprintf( __( 'Configured memory limit is %s. Larger WooCommerce stores often benefit from at least 128M.', 'storecheckup' ), defined( 'WP_MEMORY_LIMIT' ) ? WP_MEMORY_LIMIT : __( 'unknown', 'storecheckup' ) ) );
 	}
 
 	private function php_version_check() {
 		if ( version_compare( PHP_VERSION, '8.1', '>=' ) ) {
+			/* translators: %s: detected PHP version number. */
 			return new Result( 'php-version', 'system', Result::PASSED, __( 'PHP version looks modern', 'storecheckup' ), sprintf( __( 'Detected PHP %s.', 'storecheckup' ), PHP_VERSION ) );
 		}
 		if ( version_compare( PHP_VERSION, '7.4', '>=' ) ) {
+			/* translators: %s: detected PHP version number. */
 			return new Result( 'php-version', 'system', Result::INFO, __( 'PHP meets the plugin minimum', 'storecheckup' ), sprintf( __( 'Detected PHP %s. Consider a supported modern PHP branch when your hosting stack allows it.', 'storecheckup' ), PHP_VERSION ) );
 		}
+		/* translators: %s: detected PHP version number. */
 		return new Result( 'php-version', 'system', Result::CRITICAL, __( 'PHP is below the supported minimum', 'storecheckup' ), sprintf( __( 'Detected PHP %s. StoreCheckup requires PHP 7.4 or newer.', 'storecheckup' ), PHP_VERSION ) );
 	}
 
 	private function wordpress_version_check() {
 		$version = get_bloginfo( 'version' );
 		if ( version_compare( $version, '6.9', '>=' ) ) {
+			/* translators: %s: detected WordPress version number. */
 			return new Result( 'wp-version', 'system', Result::PASSED, __( 'WordPress version is supported', 'storecheckup' ), sprintf( __( 'Detected WordPress %s.', 'storecheckup' ), $version ) );
 		}
+		/* translators: %s: detected WordPress version number. */
 		return new Result( 'wp-version', 'system', Result::CRITICAL, __( 'WordPress is below the supported baseline', 'storecheckup' ), sprintf( __( 'Detected WordPress %s. StoreCheckup 1.0 requires WordPress 6.9 or newer.', 'storecheckup' ), $version ), 1, admin_url( 'update-core.php' ), __( 'Review updates', 'storecheckup' ) );
 	}
 
 	private function woocommerce_version_check() {
 		$version = defined( 'WC_VERSION' ) ? WC_VERSION : '0';
 		if ( version_compare( $version, '10.8', '>=' ) ) {
+			/* translators: %s: detected WooCommerce version number. */
 			return new Result( 'wc-version', 'system', Result::PASSED, __( 'WooCommerce version is supported', 'storecheckup' ), sprintf( __( 'Detected WooCommerce %s.', 'storecheckup' ), $version ) );
 		}
+		/* translators: %s: detected WooCommerce version number. */
 		return new Result( 'wc-version', 'system', Result::CRITICAL, __( 'WooCommerce is below the supported baseline', 'storecheckup' ), sprintf( __( 'Detected WooCommerce %s. StoreCheckup 1.0 supports WooCommerce 10.8 or newer.', 'storecheckup' ), $version ), 1, admin_url( 'plugins.php' ), __( 'Open Plugins', 'storecheckup' ) );
 	}
 
@@ -117,6 +126,7 @@ final class System_Checks {
 
 	private function environment_check() {
 		$type = function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production';
+		/* translators: %s: current WordPress environment type, such as production or staging. */
 		return new Result( 'environment', 'system', Result::INFO, __( 'WordPress environment type', 'storecheckup' ), sprintf( __( 'Environment type: %s.', 'storecheckup' ), $type ) );
 	}
 

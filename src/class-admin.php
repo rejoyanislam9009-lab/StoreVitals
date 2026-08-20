@@ -66,7 +66,8 @@ final class Admin {
 		}
 		check_admin_referer( 'storecheckup_rescan' );
 		$this->scanner->clear_cache();
-		wp_safe_redirect( admin_url( 'admin.php?page=storecheckup&rescanned=1' ) );
+		set_transient( 'storecheckup_notice_' . get_current_user_id(), 'rescanned', MINUTE_IN_SECONDS );
+		wp_safe_redirect( admin_url( 'admin.php?page=storecheckup' ) );
 		exit;
 	}
 
@@ -76,7 +77,8 @@ final class Admin {
 		}
 		check_admin_referer( 'storecheckup_clear_history' );
 		$this->history->clear();
-		wp_safe_redirect( admin_url( 'admin.php?page=storecheckup&view=history&history_cleared=1' ) );
+		set_transient( 'storecheckup_notice_' . get_current_user_id(), 'history_cleared', MINUTE_IN_SECONDS );
+		wp_safe_redirect( admin_url( 'admin.php?page=storecheckup&view=history' ) );
 		exit;
 	}
 
@@ -86,6 +88,7 @@ final class Admin {
 		}
 
 		$scan = $this->scanner->scan();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only navigation parameter; no state is changed.
 		$view = isset( $_GET['view'] ) ? sanitize_key( wp_unslash( $_GET['view'] ) ) : 'overview';
 		if ( ! in_array( $view, array( 'overview', 'issues', 'catalog', 'operations', 'system', 'history', 'reports' ), true ) ) {
 			$view = 'overview';
