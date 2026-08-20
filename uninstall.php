@@ -1,8 +1,6 @@
 <?php
 /**
- * StoreVitals uninstall handler.
- *
- * StoreVitals 1.0 stores no persistent plugin settings or custom tables.
+ * Uninstall StoreVitals.
  *
  * @package StoreVitals
  */
@@ -10,3 +8,5 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
+
+delete_option( 'storevitals_scan_history' );

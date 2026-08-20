@@ -1,5 +1,5 @@
 # Security
 
-StoreVitals 1.0 is diagnostic-first and does not modify WooCommerce products, orders, payment data, or shipping data.
+StoreVitals is designed as a read-only diagnostic plugin. State-changing admin actions such as fresh scans, history deletion, and report exports require the `manage_woocommerce` capability and WordPress nonces.
 
-Security-sensitive admin actions require the `manage_woocommerce` capability and WordPress nonce verification. No telemetry or remote code loading is included.
+Please report security issues privately to the project maintainer rather than posting exploit details publicly.

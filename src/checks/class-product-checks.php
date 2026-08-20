@@ -1,43 +1,190 @@
 <?php
-/** Bounded catalog checks. @package StoreVitals */
+/**
+ * Bounded catalog and inventory checks.
+ *
+ * @package StoreVitals
+ */
+
 namespace StoreVitals\Checks;
+
 use StoreVitals\Result;
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 final class Product_Checks {
-	const MAX_PRODUCTS = 1000; const PAGE_SIZE = 100;
+	const MAX_PRODUCTS   = 1000;
+	const MAX_VARIATIONS = 2000;
+	const PAGE_SIZE      = 100;
+
 	public function run() {
-		$counts = array( 'scanned'=>0, 'missing_price'=>0, 'missing_image'=>0, 'missing_sku'=>0, 'missing_short_desc'=>0, 'uncategorized'=>0, 'variable_no_children'=>0, 'out_of_stock'=>0 );
-		$page = 1;
+		$counts = array(
+			'scanned'                 => 0,
+			'variations_scanned'      => 0,
+			'missing_price'           => 0,
+			'missing_image'           => 0,
+			'missing_sku'             => 0,
+			'duplicate_sku'           => 0,
+			'missing_short_desc'      => 0,
+			'uncategorized'           => 0,
+			'variable_no_children'    => 0,
+			'variation_missing_price' => 0,
+			'download_missing_files'  => 0,
+			'external_missing_url'    => 0,
+			'out_of_stock'            => 0,
+			'low_stock'               => 0,
+			'negative_stock'          => 0,
+			'backorders'              => 0,
+			'draft_pending'           => 0,
+		);
+
+		$seen_skus = array();
+		$page      = 1;
+
 		do {
-			$query = wc_get_products( array( 'status'=>array('publish','private','draft','pending'), 'limit'=>self::PAGE_SIZE, 'page'=>$page, 'paginate'=>true, 'return'=>'objects' ) );
+			$query = wc_get_products(
+				array(
+					'status'   => array( 'publish', 'private', 'draft', 'pending' ),
+					'limit'    => self::PAGE_SIZE,
+					'page'     => $page,
+					'paginate' => true,
+					'return'   => 'objects',
+				)
+			);
+
 			$products = isset( $query->products ) ? $query->products : array();
 			foreach ( $products as $product ) {
-				if ( $counts['scanned'] >= self::MAX_PRODUCTS ) { break 2; }
+				if ( $counts['scanned'] >= self::MAX_PRODUCTS ) {
+					break 2;
+				}
+
 				++$counts['scanned'];
-				if ( '' === (string) $product->get_price() ) { ++$counts['missing_price']; }
-				if ( ! $product->get_image_id() ) { ++$counts['missing_image']; }
-				if ( '' === trim( (string) $product->get_sku() ) ) { ++$counts['missing_sku']; }
-				if ( '' === trim( wp_strip_all_tags( (string) $product->get_short_description() ) ) ) { ++$counts['missing_short_desc']; }
-				if ( empty( $product->get_category_ids() ) ) { ++$counts['uncategorized']; }
-				if ( $product->is_type( 'variable' ) && empty( $product->get_children() ) ) { ++$counts['variable_no_children']; }
-				if ( ! $product->is_in_stock() ) { ++$counts['out_of_stock']; }
+				$status = $product->get_status();
+				if ( in_array( $status, array( 'draft', 'pending' ), true ) ) {
+					++$counts['draft_pending'];
+				}
+
+				if ( '' === (string) $product->get_price() && ! $product->is_type( 'variable' ) ) {
+					++$counts['missing_price'];
+				}
+				if ( ! $product->get_image_id() ) {
+					++$counts['missing_image'];
+				}
+
+				$sku = trim( (string) $product->get_sku() );
+				if ( '' === $sku ) {
+					++$counts['missing_sku'];
+				} else {
+					$sku_key = strtolower( $sku );
+					if ( isset( $seen_skus[ $sku_key ] ) ) {
+						++$counts['duplicate_sku'];
+					} else {
+						$seen_skus[ $sku_key ] = true;
+					}
+				}
+
+				if ( '' === trim( wp_strip_all_tags( (string) $product->get_short_description() ) ) ) {
+					++$counts['missing_short_desc'];
+				}
+				if ( empty( $product->get_category_ids() ) ) {
+					++$counts['uncategorized'];
+				}
+				if ( $product->is_downloadable() && empty( $product->get_downloads() ) ) {
+					++$counts['download_missing_files'];
+				}
+				if ( $product->is_type( 'external' ) && '' === trim( (string) $product->get_product_url() ) ) {
+					++$counts['external_missing_url'];
+				}
+				if ( ! $product->is_in_stock() ) {
+					++$counts['out_of_stock'];
+				}
+				if ( $product->backorders_allowed() ) {
+					++$counts['backorders'];
+				}
+
+				if ( $product->managing_stock() ) {
+					$quantity = $product->get_stock_quantity();
+					if ( null !== $quantity ) {
+						$quantity = (float) $quantity;
+						if ( $quantity < 0 ) {
+							++$counts['negative_stock'];
+						} elseif ( $quantity > 0 ) {
+							$low_amount = function_exists( 'wc_get_low_stock_amount' ) ? wc_get_low_stock_amount( $product ) : 2;
+							if ( $quantity <= (float) $low_amount ) {
+								++$counts['low_stock'];
+							}
+						}
+					}
+				}
+
+				if ( $product->is_type( 'variable' ) ) {
+					$children = $product->get_children();
+					if ( empty( $children ) ) {
+						++$counts['variable_no_children'];
+					} else {
+						foreach ( $children as $variation_id ) {
+							if ( $counts['variations_scanned'] >= self::MAX_VARIATIONS ) {
+								break;
+							}
+							$variation = wc_get_product( $variation_id );
+							if ( ! $variation ) {
+								continue;
+							}
+							++$counts['variations_scanned'];
+							if ( '' === (string) $variation->get_price() ) {
+								++$counts['variation_missing_price'];
+							}
+						}
+					}
+				}
 			}
-			++$page; $max_pages = isset( $query->max_num_pages ) ? (int) $query->max_num_pages : 1;
+
+			++$page;
+			$max_pages = isset( $query->max_num_pages ) ? (int) $query->max_num_pages : 1;
 		} while ( $page <= $max_pages && $counts['scanned'] < self::MAX_PRODUCTS );
-		$url = admin_url( 'edit.php?post_type=product' );
+
+		$products_url = admin_url( 'edit.php?post_type=product' );
+		$stock_url    = admin_url( 'admin.php?page=wc-reports&tab=stock' );
+
 		return array(
-			new Result( 'products-scanned', 'products', Result::INFO, __( 'Product scan completed', 'storevitals' ), sprintf( __( 'Scanned %1$d products. Each scan is capped at %2$d products.', 'storevitals' ), $counts['scanned'], self::MAX_PRODUCTS ), $counts['scanned'] ),
-			$this->issue( 'missing-price', __( 'Products without a price', 'storevitals' ), $counts['missing_price'], Result::CRITICAL, __( 'Products without a price may be unavailable for normal purchase flows.', 'storevitals' ), $url ),
-			$this->issue( 'missing-image', __( 'Products without a featured image', 'storevitals' ), $counts['missing_image'], Result::WARNING, __( 'Product imagery is a major part of catalog usability.', 'storevitals' ), $url ),
-			$this->issue( 'missing-sku', __( 'Products without an SKU', 'storevitals' ), $counts['missing_sku'], Result::INFO, __( 'SKUs are optional but useful for inventory and integrations.', 'storevitals' ), $url ),
-			$this->issue( 'missing-short-description', __( 'Products without a short description', 'storevitals' ), $counts['missing_short_desc'], Result::INFO, __( 'A concise product summary can improve catalog consistency.', 'storevitals' ), $url ),
-			$this->issue( 'uncategorized-products', __( 'Products without a category', 'storevitals' ), $counts['uncategorized'], Result::WARNING, __( 'Categories help customers browse and managers maintain the catalog.', 'storevitals' ), $url ),
-			$this->issue( 'empty-variable-products', __( 'Variable products without variations', 'storevitals' ), $counts['variable_no_children'], Result::CRITICAL, __( 'A variable product with no variations cannot present normal variation choices.', 'storevitals' ), $url ),
-			new Result( 'out-of-stock', 'inventory', Result::INFO, __( 'Out-of-stock products', 'storevitals' ), sprintf( _n( '%d scanned product is currently out of stock.', '%d scanned products are currently out of stock.', $counts['out_of_stock'], 'storevitals' ), $counts['out_of_stock'] ), $counts['out_of_stock'], $url, __( 'Open products', 'storevitals' ) )
+			new Result(
+				'products-scanned',
+				'products',
+				Result::INFO,
+				__( 'Catalog scan completed', 'storevitals' ),
+				sprintf(
+					__( 'Scanned %1$d products and %2$d variations. Product scans are capped at %3$d products and %4$d variations per request.', 'storevitals' ),
+					$counts['scanned'],
+					$counts['variations_scanned'],
+					self::MAX_PRODUCTS,
+					self::MAX_VARIATIONS
+				),
+				$counts['scanned']
+			),
+			$this->issue( 'missing-price', 'products', __( 'Products without a price', 'storevitals' ), $counts['missing_price'], Result::CRITICAL, __( 'Non-variable products without a price may be unavailable for normal purchase flows.', 'storevitals' ), $products_url ),
+			$this->issue( 'variation-missing-price', 'products', __( 'Variations without a price', 'storevitals' ), $counts['variation_missing_price'], Result::CRITICAL, __( 'A purchasable variation normally needs a price.', 'storevitals' ), $products_url ),
+			$this->issue( 'empty-variable-products', 'products', __( 'Variable products without variations', 'storevitals' ), $counts['variable_no_children'], Result::CRITICAL, __( 'A variable product with no variations cannot present normal variation choices.', 'storevitals' ), $products_url ),
+			$this->issue( 'download-missing-files', 'products', __( 'Downloadable products without files', 'storevitals' ), $counts['download_missing_files'], Result::CRITICAL, __( 'A downloadable product should normally have at least one downloadable file assigned.', 'storevitals' ), $products_url ),
+			$this->issue( 'external-missing-url', 'products', __( 'External products without a product URL', 'storevitals' ), $counts['external_missing_url'], Result::CRITICAL, __( 'External/affiliate products need a destination URL to work as intended.', 'storevitals' ), $products_url ),
+			$this->issue( 'missing-image', 'products', __( 'Products without a featured image', 'storevitals' ), $counts['missing_image'], Result::WARNING, __( 'Product imagery is a major part of catalog usability.', 'storevitals' ), $products_url ),
+			$this->issue( 'uncategorized-products', 'products', __( 'Products without a category', 'storevitals' ), $counts['uncategorized'], Result::WARNING, __( 'Categories help customers browse and managers maintain the catalog.', 'storevitals' ), $products_url ),
+			$this->issue( 'duplicate-sku', 'products', __( 'Duplicate SKUs in the bounded scan', 'storevitals' ), $counts['duplicate_sku'], Result::WARNING, __( 'Duplicate SKUs can confuse inventory workflows and external integrations.', 'storevitals' ), $products_url ),
+			$this->issue( 'missing-sku', 'products', __( 'Products without an SKU', 'storevitals' ), $counts['missing_sku'], Result::INFO, __( 'SKUs are optional but useful for inventory and integrations.', 'storevitals' ), $products_url ),
+			$this->issue( 'missing-short-description', 'products', __( 'Products without a short description', 'storevitals' ), $counts['missing_short_desc'], Result::INFO, __( 'A concise product summary can improve catalog consistency.', 'storevitals' ), $products_url ),
+			$this->issue( 'draft-pending-products', 'products', __( 'Draft or pending products', 'storevitals' ), $counts['draft_pending'], Result::INFO, __( 'Review unfinished catalog items periodically so stale drafts do not accumulate.', 'storevitals' ), $products_url ),
+			$this->issue( 'negative-stock', 'inventory', __( 'Products with negative stock quantities', 'storevitals' ), $counts['negative_stock'], Result::CRITICAL, __( 'Negative inventory can indicate overselling, imports, or stock synchronization problems.', 'storevitals' ), $stock_url ),
+			$this->issue( 'low-stock', 'inventory', __( 'Low-stock products', 'storevitals' ), $counts['low_stock'], Result::WARNING, __( 'These products are at or below their configured low-stock threshold.', 'storevitals' ), $stock_url ),
+			new Result( 'out-of-stock', 'inventory', Result::INFO, __( 'Out-of-stock products', 'storevitals' ), sprintf( _n( '%d scanned product is currently out of stock.', '%d scanned products are currently out of stock.', $counts['out_of_stock'], 'storevitals' ), $counts['out_of_stock'] ), $counts['out_of_stock'], $stock_url, __( 'Review stock', 'storevitals' ) ),
+			new Result( 'backorders-enabled', 'inventory', Result::INFO, __( 'Products allowing backorders', 'storevitals' ), sprintf( _n( '%d scanned product allows backorders.', '%d scanned products allow backorders.', $counts['backorders'], 'storevitals' ), $counts['backorders'] ), $counts['backorders'], $stock_url, __( 'Review stock', 'storevitals' ) ),
 		);
 	}
-	private function issue( $id, $title, $count, $severity, $description, $url ) {
-		if ( $count > 0 ) { return new Result( $id, 'products', $severity, $title, sprintf( _n( '%1$d affected product. %2$s', '%1$d affected products. %2$s', $count, 'storevitals' ), $count, $description ), $count, $url, __( 'Open products', 'storevitals' ) ); }
-		return new Result( $id, 'products', Result::PASSED, $title, __( 'No affected products were found in the bounded scan.', 'storevitals' ), 0, $url, __( 'Open products', 'storevitals' ) );
+
+	private function issue( $id, $area, $title, $count, $severity, $description, $url ) {
+		if ( $count > 0 ) {
+			return new Result( $id, $area, $severity, $title, sprintf( _n( '%1$d affected item. %2$s', '%1$d affected items. %2$s', $count, 'storevitals' ), $count, $description ), $count, $url, 'inventory' === $area ? __( 'Review inventory', 'storevitals' ) : __( 'Open products', 'storevitals' ) );
+		}
+
+		return new Result( $id, $area, Result::PASSED, $title, __( 'No affected items were found in the bounded scan.', 'storevitals' ), 0, $url, 'inventory' === $area ? __( 'Review inventory', 'storevitals' ) : __( 'Open products', 'storevitals' ) );
 	}
 }
