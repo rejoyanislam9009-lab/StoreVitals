@@ -131,7 +131,7 @@ trait Admin_Presentation {
 					<div><dt><?php echo esc_html__( 'Last scan', 'storecheckup' ); ?></dt><dd><?php echo esc_html( sprintf( __( '%1$s (%2$s ago)', 'storecheckup' ), wp_date( 'M j, Y g:i a T', $scan['scanned_at'] ), human_time_diff( $scan['scanned_at'], time() ) ) ); ?></dd></div>
 					<div><dt><?php echo esc_html__( 'Site timezone', 'storecheckup' ); ?></dt><dd><?php echo esc_html( wp_timezone_string() ); ?></dd></div>
 					<?php if ( null !== $score_delta ) : ?><div><dt><?php echo esc_html__( 'Score change', 'storecheckup' ); ?></dt><dd><?php echo esc_html( ( $score_delta > 0 ? '+' : '' ) . (string) $score_delta ); ?></dd></div><?php endif; ?>
-					<div><dt><?php echo esc_html__( 'Cache', 'storecheckup' ); ?</dt><dd><?php echo esc_html__( '5 minutes', 'storecheckup' ); ?></dd></div>
+					<div><dt><?php echo esc_html__( 'Cache', 'storecheckup' ); ?></dt><dd><?php echo esc_html__( '5 minutes', 'storecheckup' ); ?></dd></div>
 					<div><dt><?php echo esc_html__( 'Mode', 'storecheckup' ); ?></dt><dd><?php echo esc_html__( 'Read-only diagnostics', 'storecheckup' ); ?></dd></div>
 				</dl>
 				<p class="description"><?php echo esc_html__( 'StoreCheckup does not delete, edit, refund, cancel, or automatically repair store data.', 'storecheckup' ); ?></p>
