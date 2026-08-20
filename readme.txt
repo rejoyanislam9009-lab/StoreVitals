@@ -74,7 +74,7 @@ CSV and JSON exports are generated only when an authorized WooCommerce manager e
 == Changelog ==
 
 = 1.0.0 =
-* Initial public release candidate.
+* Initial public release.
 * Added responsive Store Health Dashboard with overview, diagnostics, catalog, operations, system, history, and reports sections.
 * Added bounded product and variation diagnostics with product-quality and inventory signals.
 * Added checkout, payment, shipping, email, order-state, HPOS, Action Scheduler, and system diagnostics.
