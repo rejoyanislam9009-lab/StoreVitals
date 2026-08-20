@@ -1,7 +1,8 @@
 # Changelog
 
-## 1.0.0 - Release candidate
+## 1.0.0
 
+- Initial public release.
 - Responsive WooCommerce-submenu health dashboard and section navigation.
 - Overall and per-area health scoring.
 - Bounded product, variation, and inventory diagnostics.
