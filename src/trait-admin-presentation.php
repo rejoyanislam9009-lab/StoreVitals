@@ -26,7 +26,7 @@ trait Admin_Presentation {
 		<header class="storecheckup-app-header">
 			<div class="storecheckup-brand-row">
 				<div class="storecheckup-brand">
-					<div class="storecheckup-brand-mark" aria-hidden="true"><span>RH</span></div>
+					<div class="storecheckup-brand-mark" aria-hidden="true"><span>FS</span></div>
 					<div>
 						<div class="storecheckup-title-line"><h1><?php echo esc_html__( 'Flow Store Check', 'flow-store-check' ); ?></h1><span class="storecheckup-version"><?php echo esc_html( 'v' . STORECHECKUP_VERSION ); ?></span></div>
 					<p><?php echo esc_html__( 'Store Health Dashboard for WooCommerce', 'flow-store-check' ); ?></p>
