@@ -1,8 +1,8 @@
 # WordPress.org release checklist
 
-- [x] Distinctive public name selected: Rejoyan Store Health for WooCommerce.
-- [x] Requested WordPress.org slug selected: `rejoyan-store-health`.
-- [x] Plugin header, readme title, and text domain aligned with the requested slug.
+- [x] Public name selected: Flow Store Check for WooCommerce.
+- [x] Requested WordPress.org slug selected: `flow-store-check`.
+- [x] Plugin header, readme title, main file, and text domain aligned with the requested slug.
 - [ ] PHP syntax passes supported matrix after review rename.
 - [ ] Official WordPress Plugin Check has no unresolved errors after review rename.
 - [ ] Runtime test passes on the minimum supported WordPress/PHP/WooCommerce boundary.
