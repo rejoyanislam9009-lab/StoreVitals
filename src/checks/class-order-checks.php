@@ -31,9 +31,9 @@ final class Order_Checks {
 		$url   = admin_url( 'admin.php?page=wc-orders&status=wc-failed' );
 		if ( $count ) {
 			/* translators: %d: number of failed orders found in the last 30 days. */
-			return new Result( 'failed-orders', 'orders', Result::WARNING, __( 'Failed orders in the last 30 days', 'rejoyan-store-health' ), sprintf( _n( '%d failed order was found in the last 30 days.', '%d failed orders were found in the last 30 days.', $count, 'rejoyan-store-health' ), $count ), $count, $url, __( 'Review orders', 'rejoyan-store-health' ) );
+			return new Result( 'failed-orders', 'orders', Result::WARNING, __( 'Failed orders in the last 30 days', 'flow-store-check' ), sprintf( _n( '%d failed order was found in the last 30 days.', '%d failed orders were found in the last 30 days.', $count, 'flow-store-check' ), $count ), $count, $url, __( 'Review orders', 'flow-store-check' ) );
 		}
-		return new Result( 'failed-orders', 'orders', Result::PASSED, __( 'No recent failed orders found', 'rejoyan-store-health' ), __( 'No failed orders were found in the last 30 days.', 'rejoyan-store-health' ), 0, $url, __( 'Open orders', 'rejoyan-store-health' ) );
+		return new Result( 'failed-orders', 'orders', Result::PASSED, __( 'No recent failed orders found', 'flow-store-check' ), __( 'No failed orders were found in the last 30 days.', 'flow-store-check' ), 0, $url, __( 'Open orders', 'flow-store-check' ) );
 	}
 
 	private function stale_on_hold_orders_check() {
@@ -41,9 +41,9 @@ final class Order_Checks {
 		$url   = admin_url( 'admin.php?page=wc-orders&status=wc-on-hold' );
 		if ( $count ) {
 			/* translators: %d: number of on-hold orders older than seven days. */
-			return new Result( 'stale-on-hold-orders', 'orders', Result::WARNING, __( 'On-hold orders older than 7 days', 'rejoyan-store-health' ), sprintf( _n( '%d on-hold order is older than 7 days.', '%d on-hold orders are older than 7 days.', $count, 'rejoyan-store-health' ), $count ), $count, $url, __( 'Review orders', 'rejoyan-store-health' ) );
+			return new Result( 'stale-on-hold-orders', 'orders', Result::WARNING, __( 'On-hold orders older than 7 days', 'flow-store-check' ), sprintf( _n( '%d on-hold order is older than 7 days.', '%d on-hold orders are older than 7 days.', $count, 'flow-store-check' ), $count ), $count, $url, __( 'Review orders', 'flow-store-check' ) );
 		}
-		return new Result( 'stale-on-hold-orders', 'orders', Result::PASSED, __( 'No stale on-hold orders found', 'rejoyan-store-health' ), __( 'No on-hold orders older than 7 days were found.', 'rejoyan-store-health' ), 0, $url, __( 'Open orders', 'rejoyan-store-health' ) );
+		return new Result( 'stale-on-hold-orders', 'orders', Result::PASSED, __( 'No stale on-hold orders found', 'flow-store-check' ), __( 'No on-hold orders older than 7 days were found.', 'flow-store-check' ), 0, $url, __( 'Open orders', 'flow-store-check' ) );
 	}
 
 	private function stale_pending_orders_check() {
@@ -51,21 +51,21 @@ final class Order_Checks {
 		$url   = admin_url( 'admin.php?page=wc-orders&status=wc-pending' );
 		if ( $count ) {
 			/* translators: %d: number of pending-payment orders older than 24 hours. */
-			return new Result( 'stale-pending-orders', 'orders', Result::WARNING, __( 'Pending-payment orders older than 24 hours', 'rejoyan-store-health' ), sprintf( _n( '%d pending-payment order is older than 24 hours.', '%d pending-payment orders are older than 24 hours.', $count, 'rejoyan-store-health' ), $count ), $count, $url, __( 'Review orders', 'rejoyan-store-health' ) );
+			return new Result( 'stale-pending-orders', 'orders', Result::WARNING, __( 'Pending-payment orders older than 24 hours', 'flow-store-check' ), sprintf( _n( '%d pending-payment order is older than 24 hours.', '%d pending-payment orders are older than 24 hours.', $count, 'flow-store-check' ), $count ), $count, $url, __( 'Review orders', 'flow-store-check' ) );
 		}
-		return new Result( 'stale-pending-orders', 'orders', Result::PASSED, __( 'No stale pending-payment orders found', 'rejoyan-store-health' ), __( 'No pending-payment orders older than 24 hours were found.', 'rejoyan-store-health' ), 0, $url, __( 'Open orders', 'rejoyan-store-health' ) );
+		return new Result( 'stale-pending-orders', 'orders', Result::PASSED, __( 'No stale pending-payment orders found', 'flow-store-check' ), __( 'No pending-payment orders older than 24 hours were found.', 'flow-store-check' ), 0, $url, __( 'Open orders', 'flow-store-check' ) );
 	}
 
 	private function cancelled_orders_check() {
 		$count = $this->order_count_since( 'wc-cancelled', 30 );
 		/* translators: %d: number of cancelled orders found in the last 30 days. */
-		return new Result( 'cancelled-orders', 'orders', Result::INFO, __( 'Cancelled orders in the last 30 days', 'rejoyan-store-health' ), sprintf( _n( '%d cancelled order was found.', '%d cancelled orders were found.', $count, 'rejoyan-store-health' ), $count ), $count, admin_url( 'admin.php?page=wc-orders&status=wc-cancelled' ), __( 'Review orders', 'rejoyan-store-health' ) );
+		return new Result( 'cancelled-orders', 'orders', Result::INFO, __( 'Cancelled orders in the last 30 days', 'flow-store-check' ), sprintf( _n( '%d cancelled order was found.', '%d cancelled orders were found.', $count, 'flow-store-check' ), $count ), $count, admin_url( 'admin.php?page=wc-orders&status=wc-cancelled' ), __( 'Review orders', 'flow-store-check' ) );
 	}
 
 	private function refunded_orders_check() {
 		$count = $this->order_count_since( 'wc-refunded', 30 );
 		/* translators: %d: number of refunded orders found in the last 30 days. */
-		return new Result( 'refunded-orders', 'orders', Result::INFO, __( 'Refunded orders in the last 30 days', 'rejoyan-store-health' ), sprintf( _n( '%d refunded order was found.', '%d refunded orders were found.', $count, 'rejoyan-store-health' ), $count ), $count, admin_url( 'admin.php?page=wc-orders&status=wc-refunded' ), __( 'Review orders', 'rejoyan-store-health' ) );
+		return new Result( 'refunded-orders', 'orders', Result::INFO, __( 'Refunded orders in the last 30 days', 'flow-store-check' ), sprintf( _n( '%d refunded order was found.', '%d refunded orders were found.', $count, 'flow-store-check' ), $count ), $count, admin_url( 'admin.php?page=wc-orders&status=wc-refunded' ), __( 'Review orders', 'flow-store-check' ) );
 	}
 
 	private function order_count_since( $status, $days ) {
@@ -97,7 +97,7 @@ final class Order_Checks {
 	private function scheduled_actions_check() {
 		$url = admin_url( 'admin.php?page=wc-status&tab=action-scheduler' );
 		if ( ! function_exists( 'as_get_scheduled_actions' ) ) {
-			return new Result( 'scheduled-actions', 'system', Result::INFO, __( 'Scheduled Actions API unavailable', 'rejoyan-store-health' ), __( 'Action Scheduler was not available through its public query function.', 'rejoyan-store-health' ) );
+			return new Result( 'scheduled-actions', 'system', Result::INFO, __( 'Scheduled Actions API unavailable', 'flow-store-check' ), __( 'Action Scheduler was not available through its public query function.', 'flow-store-check' ) );
 		}
 
 		$failed = as_get_scheduled_actions(
@@ -112,15 +112,15 @@ final class Order_Checks {
 		$count = is_array( $failed ) ? count( $failed ) : 0;
 		if ( $count ) {
 			/* translators: %d: number of failed Action Scheduler actions returned by the bounded query. */
-			return new Result( 'scheduled-actions', 'system', Result::WARNING, __( 'Failed scheduled actions were found', 'rejoyan-store-health' ), sprintf( __( 'The bounded query found %d failed actions (up to 50 returned).', 'rejoyan-store-health' ), $count ), $count, $url, __( 'Open Scheduled Actions', 'rejoyan-store-health' ) );
+			return new Result( 'scheduled-actions', 'system', Result::WARNING, __( 'Failed scheduled actions were found', 'flow-store-check' ), sprintf( __( 'The bounded query found %d failed actions (up to 50 returned).', 'flow-store-check' ), $count ), $count, $url, __( 'Open Scheduled Actions', 'flow-store-check' ) );
 		}
-		return new Result( 'scheduled-actions', 'system', Result::PASSED, __( 'No failed scheduled actions found', 'rejoyan-store-health' ), __( 'No failed actions were returned by the bounded Action Scheduler query.', 'rejoyan-store-health' ), 0, $url, __( 'Open Scheduled Actions', 'rejoyan-store-health' ) );
+		return new Result( 'scheduled-actions', 'system', Result::PASSED, __( 'No failed scheduled actions found', 'flow-store-check' ), __( 'No failed actions were returned by the bounded Action Scheduler query.', 'flow-store-check' ), 0, $url, __( 'Open Scheduled Actions', 'flow-store-check' ) );
 	}
 
 	private function overdue_actions_check() {
 		$url = admin_url( 'admin.php?page=wc-status&tab=action-scheduler' );
 		if ( ! function_exists( 'as_get_scheduled_actions' ) ) {
-			return new Result( 'overdue-actions', 'system', Result::INFO, __( 'Overdue action check unavailable', 'rejoyan-store-health' ), __( 'Action Scheduler was not available through its public query function.', 'rejoyan-store-health' ) );
+			return new Result( 'overdue-actions', 'system', Result::INFO, __( 'Overdue action check unavailable', 'flow-store-check' ), __( 'Action Scheduler was not available through its public query function.', 'flow-store-check' ) );
 		}
 
 		$actions = as_get_scheduled_actions(
@@ -137,8 +137,8 @@ final class Order_Checks {
 		$count = is_array( $actions ) ? count( $actions ) : 0;
 		if ( $count ) {
 			/* translators: %d: number of overdue pending Action Scheduler actions returned by the bounded query. */
-			return new Result( 'overdue-actions', 'system', Result::WARNING, __( 'Overdue pending actions were found', 'rejoyan-store-health' ), sprintf( __( 'The bounded query found %d pending actions scheduled more than one hour ago (up to 50 returned).', 'rejoyan-store-health' ), $count ), $count, $url, __( 'Open Scheduled Actions', 'rejoyan-store-health' ) );
+			return new Result( 'overdue-actions', 'system', Result::WARNING, __( 'Overdue pending actions were found', 'flow-store-check' ), sprintf( __( 'The bounded query found %d pending actions scheduled more than one hour ago (up to 50 returned).', 'flow-store-check' ), $count ), $count, $url, __( 'Open Scheduled Actions', 'flow-store-check' ) );
 		}
-		return new Result( 'overdue-actions', 'system', Result::PASSED, __( 'No overdue pending actions found', 'rejoyan-store-health' ), __( 'No pending actions more than one hour overdue were returned by the bounded query.', 'rejoyan-store-health' ), 0, $url, __( 'Open Scheduled Actions', 'rejoyan-store-health' ) );
+		return new Result( 'overdue-actions', 'system', Result::PASSED, __( 'No overdue pending actions found', 'flow-store-check' ), __( 'No pending actions more than one hour overdue were returned by the bounded query.', 'flow-store-check' ), 0, $url, __( 'Open Scheduled Actions', 'flow-store-check' ) );
 	}
 }

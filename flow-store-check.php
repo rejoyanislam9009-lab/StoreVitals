@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Rejoyan Store Health for WooCommerce
+ * Plugin Name:       Flow Store Check for WooCommerce
  * Description:       Read-only store health diagnostics for WooCommerce products, inventory, checkout, orders, payments, shipping, and system configuration.
  * Version:           1.0.0
  * Requires at least: 6.9
@@ -9,7 +9,7 @@
  * Author:            Rejoyan Islam
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       rejoyan-store-health
+ * Text Domain:       flow-store-check
  * Domain Path:       /languages
  * WC requires at least: 10.8
  * WC tested up to:   11.0.1
