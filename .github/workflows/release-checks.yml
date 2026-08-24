@@ -39,3 +39,14 @@ jobs:
         uses: wordpress/plugin-check-action@v1
         with:
           build-dir: ./build/rejoyan-store-health
+      - name: Build installable ZIP
+        run: |
+          cd build
+          zip -r rejoyan-store-health-1.0.0.zip rejoyan-store-health
+      - name: Upload installable ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: rejoyan-store-health-1.0.0
+          path: build/rejoyan-store-health-1.0.0.zip
+          if-no-files-found: error
+          retention-days: 14
