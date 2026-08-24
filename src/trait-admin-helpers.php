@@ -61,29 +61,29 @@ trait Admin_Helpers {
 
 	private function area_label( $area ) {
 		$labels = array(
-			'products'  => __( 'Products', 'storecheckup' ),
-			'inventory' => __( 'Inventory', 'storecheckup' ),
-			'orders'    => __( 'Orders', 'storecheckup' ),
-			'checkout'  => __( 'Checkout', 'storecheckup' ),
-			'payments'  => __( 'Payments', 'storecheckup' ),
-			'shipping'  => __( 'Shipping', 'storecheckup' ),
-			'system'    => __( 'System', 'storecheckup' ),
-			'store'     => __( 'Store', 'storecheckup' ),
+			'products'  => __( 'Products', 'rejoyan-store-health' ),
+			'inventory' => __( 'Inventory', 'rejoyan-store-health' ),
+			'orders'    => __( 'Orders', 'rejoyan-store-health' ),
+			'checkout'  => __( 'Checkout', 'rejoyan-store-health' ),
+			'payments'  => __( 'Payments', 'rejoyan-store-health' ),
+			'shipping'  => __( 'Shipping', 'rejoyan-store-health' ),
+			'system'    => __( 'System', 'rejoyan-store-health' ),
+			'store'     => __( 'Store', 'rejoyan-store-health' ),
 		);
 		return isset( $labels[ $area ] ) ? $labels[ $area ] : ucwords( str_replace( '-', ' ', $area ) );
 	}
 
 	private function score_label( $score ) {
 		if ( $score >= 90 ) {
-			return __( 'Excellent', 'storecheckup' );
+			return __( 'Excellent', 'rejoyan-store-health' );
 		}
 		if ( $score >= 75 ) {
-			return __( 'Good', 'storecheckup' );
+			return __( 'Good', 'rejoyan-store-health' );
 		}
 		if ( $score >= 50 ) {
-			return __( 'Needs attention', 'storecheckup' );
+			return __( 'Needs attention', 'rejoyan-store-health' );
 		}
-		return __( 'Critical', 'storecheckup' );
+		return __( 'Critical', 'rejoyan-store-health' );
 	}
 
 	private function score_tone( $score ) {
@@ -101,14 +101,14 @@ trait Admin_Helpers {
 
 	private function headline_for_score( $score ) {
 		if ( $score >= 90 ) {
-			return __( 'Your store is in strong shape.', 'storecheckup' );
+			return __( 'Your store is in strong shape.', 'rejoyan-store-health' );
 		}
 		if ( $score >= 75 ) {
-			return __( 'Your store looks healthy with a few items to review.', 'storecheckup' );
+			return __( 'Your store looks healthy with a few items to review.', 'rejoyan-store-health' );
 		}
 		if ( $score >= 50 ) {
-			return __( 'A few store health signals need attention.', 'storecheckup' );
+			return __( 'A few store health signals need attention.', 'rejoyan-store-health' );
 		}
-		return __( 'Important store health issues need review.', 'storecheckup' );
+		return __( 'Important store health issues need review.', 'rejoyan-store-health' );
 	}
 }
