@@ -1,10 +1,12 @@
-# StoreCheckup
+# Rejoyan Store Health for WooCommerce
 
-StoreCheckup is a read-only WooCommerce store health and diagnostics plugin prepared for WordPress.org distribution.
+Rejoyan Store Health is a read-only store health and diagnostics plugin for WooCommerce prepared for WordPress.org distribution.
+
+It is an independent extension for WooCommerce and is not affiliated with or endorsed by WooCommerce.
 
 ## Version 1.0.0
 
-StoreCheckup provides a responsive Store Health Dashboard covering catalog, inventory, checkout, payments, shipping, orders, email configuration, HPOS, Action Scheduler, and WordPress/PHP/WooCommerce environment signals.
+Rejoyan Store Health provides a responsive Store Health Dashboard covering catalog, inventory, checkout, payments, shipping, orders, email configuration, HPOS, Action Scheduler, and WordPress/PHP/WooCommerce environment signals.
 
 ### Safety model
 
@@ -21,6 +23,12 @@ StoreCheckup provides a responsive Store Health Dashboard covering catalog, inve
 - WooCommerce 10.8+
 - Tested on WordPress 7.1 and WooCommerce 11.0.1 during development.
 - HPOS compatibility declared.
+
+### WordPress.org identity
+
+- Display name: `Rejoyan Store Health for WooCommerce`
+- Requested slug: `rejoyan-store-health`
+- Text domain: `rejoyan-store-health`
 
 ## Release workflow
 
