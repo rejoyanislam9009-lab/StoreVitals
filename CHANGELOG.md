@@ -3,7 +3,7 @@
 ## 1.0.0
 
 - Initial public release.
-- Renamed the public plugin identity to Rejoyan Store Health for WooCommerce and requested the distinctive slug `rejoyan-store-health` following WordPress.org pre-review feedback.
+- Renamed the public plugin identity to Flow Store Check for WooCommerce and requested the slug `flow-store-check` following WordPress.org pre-review feedback.
 - Responsive WooCommerce-submenu health dashboard and section navigation.
 - Overall and per-area health scoring.
 - Bounded product, variation, and inventory diagnostics.

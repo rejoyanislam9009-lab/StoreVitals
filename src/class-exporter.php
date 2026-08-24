@@ -26,7 +26,7 @@ final class Exporter {
 	public function export_csv() {
 		$this->authorize( 'storecheckup_export_csv' );
 		$scan     = $this->scanner->scan();
-		$filename = 'rejoyan-store-health-' . gmdate( 'Y-m-d-His' ) . '.csv';
+		$filename = 'flow-store-check-' . gmdate( 'Y-m-d-His' ) . '.csv';
 
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
@@ -34,10 +34,10 @@ final class Exporter {
 
 		$output = fopen( 'php://output', 'w' );
 		if ( false === $output ) {
-			wp_die( esc_html__( 'Could not open the CSV output stream.', 'rejoyan-store-health' ) );
+			wp_die( esc_html__( 'Could not open the CSV output stream.', 'flow-store-check' ) );
 		}
 
-		$this->write_csv_row( $output, array( 'Rejoyan Store Health score', (int) $scan['score'] ) );
+		$this->write_csv_row( $output, array( 'Flow Store Check score', (int) $scan['score'] ) );
 		$this->write_csv_row( $output, array( 'Scanned at (UTC)', gmdate( 'Y-m-d H:i:s', (int) $scan['scanned_at'] ) ) );
 		$this->write_csv_row( $output, array( 'Checks', (int) $scan['check_count'] ) );
 		$this->write_csv_row( $output, array( 'Scan duration (ms)', (int) $scan['duration_ms'] ) );
@@ -52,7 +52,7 @@ final class Exporter {
 	public function export_json() {
 		$this->authorize( 'storecheckup_export_json' );
 		$scan     = $this->scanner->scan();
-		$filename = 'rejoyan-store-health-' . gmdate( 'Y-m-d-His' ) . '.json';
+		$filename = 'flow-store-check-' . gmdate( 'Y-m-d-His' ) . '.json';
 		$payload  = array(
 			'generated_at_utc' => gmdate( 'c' ),
 			'plugin_version'   => STORECHECKUP_VERSION,
@@ -94,7 +94,7 @@ final class Exporter {
 
 	private function authorize( $nonce_action ) {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			wp_die( esc_html__( 'You do not have permission to export this report.', 'rejoyan-store-health' ) );
+			wp_die( esc_html__( 'You do not have permission to export this report.', 'flow-store-check' ) );
 		}
 		check_admin_referer( $nonce_action );
 	}

@@ -44,7 +44,7 @@ final class Plugin {
 			return;
 		}
 		?>
-		<div class="notice notice-warning"><p><?php echo esc_html__( 'Rejoyan Store Health requires WooCommerce to be installed and active.', 'rejoyan-store-health' ); ?></p></div>
+		<div class="notice notice-warning"><p><?php echo esc_html__( 'Flow Store Check requires WooCommerce to be installed and active.', 'flow-store-check' ); ?></p></div>
 		<?php
 	}
 }

@@ -22,20 +22,20 @@ trait Admin_Diagnostics {
 		$results = $this->filter_results( $scan['results'], $allowed_areas, $status_filter, $area_filter, $search );
 		$areas   = $this->available_areas( $scan['results'], $allowed_areas );
 		/* translators: %d: number of diagnostic results shown after filtering. */
-		$result_count_label = sprintf( _n( '%d result', '%d results', count( $results ), 'rejoyan-store-health' ), count( $results ) );
+		$result_count_label = sprintf( _n( '%d result', '%d results', count( $results ), 'flow-store-check' ), count( $results ) );
 		?>
 		<section class="storecheckup-section">
-			<div class="storecheckup-section-heading storecheckup-section-heading-stacked"><div><span class="storecheckup-eyebrow"><?php echo esc_html__( 'Diagnostics', 'rejoyan-store-health' ); ?></span><h2><?php echo esc_html( $title ); ?></h2><p><?php echo esc_html( $description ); ?></p></div><span class="storecheckup-count-pill"><?php echo esc_html( $result_count_label ); ?></span></div>
+			<div class="storecheckup-section-heading storecheckup-section-heading-stacked"><div><span class="storecheckup-eyebrow"><?php echo esc_html__( 'Diagnostics', 'flow-store-check' ); ?></span><h2><?php echo esc_html( $title ); ?></h2><p><?php echo esc_html( $description ); ?></p></div><span class="storecheckup-count-pill"><?php echo esc_html( $result_count_label ); ?></span></div>
 			<form class="storecheckup-filterbar" method="get">
 				<input type="hidden" name="page" value="storecheckup">
 				<?php // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only navigation parameter; no state is changed. ?>
 				<input type="hidden" name="view" value="<?php echo esc_attr( isset( $_GET['view'] ) ? sanitize_key( wp_unslash( $_GET['view'] ) ) : 'issues' ); ?>">
-				<label><span class="screen-reader-text"><?php echo esc_html__( 'Search diagnostics', 'rejoyan-store-health' ); ?></span><input type="search" name="storecheckup_search" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php echo esc_attr__( 'Search diagnostics...', 'rejoyan-store-health' ); ?>"></label>
-				<label><span class="screen-reader-text"><?php echo esc_html__( 'Filter by status', 'rejoyan-store-health' ); ?></span><select name="storecheckup_status"><option value=""><?php echo esc_html__( 'All statuses', 'rejoyan-store-health' ); ?></option><?php foreach ( array( Result::CRITICAL, Result::WARNING, Result::PASSED, Result::INFO ) as $status ) : ?><option value="<?php echo esc_attr( $status ); ?>" <?php selected( $status_filter, $status ); ?>><?php echo esc_html( ucfirst( $status ) ); ?></option><?php endforeach; ?></select></label>
-				<label><span class="screen-reader-text"><?php echo esc_html__( 'Filter by area', 'rejoyan-store-health' ); ?></span><select name="storecheckup_area"><option value=""><?php echo esc_html__( 'All areas', 'rejoyan-store-health' ); ?></option><?php foreach ( $areas as $area ) : ?><option value="<?php echo esc_attr( $area ); ?>" <?php selected( $area_filter, $area ); ?>><?php echo esc_html( $this->area_label( $area ) ); ?></option><?php endforeach; ?></select></label>
-				<button class="button button-primary" type="submit"><?php echo esc_html__( 'Filter', 'rejoyan-store-health' ); ?></button>
+				<label><span class="screen-reader-text"><?php echo esc_html__( 'Search diagnostics', 'flow-store-check' ); ?></span><input type="search" name="storecheckup_search" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php echo esc_attr__( 'Search diagnostics...', 'flow-store-check' ); ?>"></label>
+				<label><span class="screen-reader-text"><?php echo esc_html__( 'Filter by status', 'flow-store-check' ); ?></span><select name="storecheckup_status"><option value=""><?php echo esc_html__( 'All statuses', 'flow-store-check' ); ?></option><?php foreach ( array( Result::CRITICAL, Result::WARNING, Result::PASSED, Result::INFO ) as $status ) : ?><option value="<?php echo esc_attr( $status ); ?>" <?php selected( $status_filter, $status ); ?>><?php echo esc_html( ucfirst( $status ) ); ?></option><?php endforeach; ?></select></label>
+				<label><span class="screen-reader-text"><?php echo esc_html__( 'Filter by area', 'flow-store-check' ); ?></span><select name="storecheckup_area"><option value=""><?php echo esc_html__( 'All areas', 'flow-store-check' ); ?></option><?php foreach ( $areas as $area ) : ?><option value="<?php echo esc_attr( $area ); ?>" <?php selected( $area_filter, $area ); ?>><?php echo esc_html( $this->area_label( $area ) ); ?></option><?php endforeach; ?></select></label>
+				<button class="button button-primary" type="submit"><?php echo esc_html__( 'Filter', 'flow-store-check' ); ?></button>
 				<?php // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only navigation parameter; no state is changed. ?>
-				<a class="button" href="<?php echo esc_url( $this->tab_url( isset( $_GET['view'] ) ? sanitize_key( wp_unslash( $_GET['view'] ) ) : 'issues' ) ); ?>"><?php echo esc_html__( 'Reset', 'rejoyan-store-health' ); ?></a>
+				<a class="button" href="<?php echo esc_url( $this->tab_url( isset( $_GET['view'] ) ? sanitize_key( wp_unslash( $_GET['view'] ) ) : 'issues' ) ); ?>"><?php echo esc_html__( 'Reset', 'flow-store-check' ); ?></a>
 			</form>
 			<?php $this->render_results( $results ); ?>
 		</section>
@@ -45,7 +45,7 @@ trait Admin_Diagnostics {
 	private function render_results( array $results ) {
 		if ( empty( $results ) ) {
 			?>
-			<div class="storecheckup-empty storecheckup-empty-card"><span class="dashicons dashicons-search" aria-hidden="true"></span><h3><?php echo esc_html__( 'No matching diagnostics', 'rejoyan-store-health' ); ?></h3><p><?php echo esc_html__( 'Try clearing the filters or using a broader search.', 'rejoyan-store-health' ); ?></p></div>
+			<div class="storecheckup-empty storecheckup-empty-card"><span class="dashicons dashicons-search" aria-hidden="true"></span><h3><?php echo esc_html__( 'No matching diagnostics', 'flow-store-check' ); ?></h3><p><?php echo esc_html__( 'Try clearing the filters or using a broader search.', 'flow-store-check' ); ?></p></div>
 			<?php
 			return;
 		}
