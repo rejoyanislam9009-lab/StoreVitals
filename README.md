@@ -1,12 +1,12 @@
-# Rejoyan Store Health for WooCommerce
+# Flow Store Check for WooCommerce
 
-Rejoyan Store Health is a read-only store health and diagnostics plugin for WooCommerce prepared for WordPress.org distribution.
+Flow Store Check is a read-only store health and diagnostics plugin for WooCommerce prepared for WordPress.org distribution.
 
 It is an independent extension for WooCommerce and is not affiliated with or endorsed by WooCommerce.
 
 ## Version 1.0.0
 
-Rejoyan Store Health provides a responsive Store Health Dashboard covering catalog, inventory, checkout, payments, shipping, orders, email configuration, HPOS, Action Scheduler, and WordPress/PHP/WooCommerce environment signals.
+Flow Store Check provides a responsive Store Health Dashboard covering catalog, inventory, checkout, payments, shipping, orders, email configuration, HPOS, Action Scheduler, and WordPress/PHP/WooCommerce environment signals.
 
 ### Safety model
 
@@ -26,9 +26,9 @@ Rejoyan Store Health provides a responsive Store Health Dashboard covering catal
 
 ### WordPress.org identity
 
-- Display name: `Rejoyan Store Health for WooCommerce`
-- Requested slug: `rejoyan-store-health`
-- Text domain: `rejoyan-store-health`
+- Display name: `Flow Store Check for WooCommerce`
+- Requested slug: `flow-store-check`
+- Text domain: `flow-store-check`
 
 ## Release workflow
 
