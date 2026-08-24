@@ -22,20 +22,20 @@ trait Admin_Diagnostics {
 		$results = $this->filter_results( $scan['results'], $allowed_areas, $status_filter, $area_filter, $search );
 		$areas   = $this->available_areas( $scan['results'], $allowed_areas );
 		/* translators: %d: number of diagnostic results shown after filtering. */
-		$result_count_label = sprintf( _n( '%d result', '%d results', count( $results ), 'storecheckup' ), count( $results ) );
+		$result_count_label = sprintf( _n( '%d result', '%d results', count( $results ), 'rejoyan-store-health' ), count( $results ) );
 		?>
 		<section class="storecheckup-section">
-			<div class="storecheckup-section-heading storecheckup-section-heading-stacked"><div><span class="storecheckup-eyebrow"><?php echo esc_html__( 'Diagnostics', 'storecheckup' ); ?></span><h2><?php echo esc_html( $title ); ?></h2><p><?php echo esc_html( $description ); ?></p></div><span class="storecheckup-count-pill"><?php echo esc_html( $result_count_label ); ?></span></div>
+			<div class="storecheckup-section-heading storecheckup-section-heading-stacked"><div><span class="storecheckup-eyebrow"><?php echo esc_html__( 'Diagnostics', 'rejoyan-store-health' ); ?></span><h2><?php echo esc_html( $title ); ?></h2><p><?php echo esc_html( $description ); ?></p></div><span class="storecheckup-count-pill"><?php echo esc_html( $result_count_label ); ?></span></div>
 			<form class="storecheckup-filterbar" method="get">
 				<input type="hidden" name="page" value="storecheckup">
 				<?php // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only navigation parameter; no state is changed. ?>
 				<input type="hidden" name="view" value="<?php echo esc_attr( isset( $_GET['view'] ) ? sanitize_key( wp_unslash( $_GET['view'] ) ) : 'issues' ); ?>">
-				<label><span class="screen-reader-text"><?php echo esc_html__( 'Search diagnostics', 'storecheckup' ); ?></span><input type="search" name="storecheckup_search" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php echo esc_attr__( 'Search diagnostics...', 'storecheckup' ); ?>"></label>
-				<label><span class="screen-reader-text"><?php echo esc_html__( 'Filter by status', 'storecheckup' ); ?></span><select name="storecheckup_status"><option value=""><?php echo esc_html__( 'All statuses', 'storecheckup' ); ?></option><?php foreach ( array( Result::CRITICAL, Result::WARNING, Result::PASSED, Result::INFO ) as $status ) : ?><option value="<?php echo esc_attr( $status ); ?>" <?php selected( $status_filter, $status ); ?>><?php echo esc_html( ucfirst( $status ) ); ?></option><?php endforeach; ?></select></label>
-				<label><span class="screen-reader-text"><?php echo esc_html__( 'Filter by area', 'storecheckup' ); ?></span><select name="storecheckup_area"><option value=""><?php echo esc_html__( 'All areas', 'storecheckup' ); ?></option><?php foreach ( $areas as $area ) : ?><option value="<?php echo esc_attr( $area ); ?>" <?php selected( $area_filter, $area ); ?>><?php echo esc_html( $this->area_label( $area ) ); ?></option><?php endforeach; ?></select></label>
-				<button class="button button-primary" type="submit"><?php echo esc_html__( 'Filter', 'storecheckup' ); ?></button>
+				<label><span class="screen-reader-text"><?php echo esc_html__( 'Search diagnostics', 'rejoyan-store-health' ); ?></span><input type="search" name="storecheckup_search" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php echo esc_attr__( 'Search diagnostics...', 'rejoyan-store-health' ); ?>"></label>
+				<label><span class="screen-reader-text"><?php echo esc_html__( 'Filter by status', 'rejoyan-store-health' ); ?></span><select name="storecheckup_status"><option value=""><?php echo esc_html__( 'All statuses', 'rejoyan-store-health' ); ?></option><?php foreach ( array( Result::CRITICAL, Result::WARNING, Result::PASSED, Result::INFO ) as $status ) : ?><option value="<?php echo esc_attr( $status ); ?>" <?php selected( $status_filter, $status ); ?>><?php echo esc_html( ucfirst( $status ) ); ?></option><?php endforeach; ?></select></label>
+				<label><span class="screen-reader-text"><?php echo esc_html__( 'Filter by area', 'rejoyan-store-health' ); ?></span><select name="storecheckup_area"><option value=""><?php echo esc_html__( 'All areas', 'rejoyan-store-health' ); ?></option><?php foreach ( $areas as $area ) : ?><option value="<?php echo esc_attr( $area ); ?>" <?php selected( $area_filter, $area ); ?>><?php echo esc_html( $this->area_label( $area ) ); ?></option><?php endforeach; ?></select></label>
+				<button class="button button-primary" type="submit"><?php echo esc_html__( 'Filter', 'rejoyan-store-health' ); ?></button>
 				<?php // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only navigation parameter; no state is changed. ?>
-				<a class="button" href="<?php echo esc_url( $this->tab_url( isset( $_GET['view'] ) ? sanitize_key( wp_unslash( $_GET['view'] ) ) : 'issues' ) ); ?>"><?php echo esc_html__( 'Reset', 'storecheckup' ); ?></a>
+				<a class="button" href="<?php echo esc_url( $this->tab_url( isset( $_GET['view'] ) ? sanitize_key( wp_unslash( $_GET['view'] ) ) : 'issues' ) ); ?>"><?php echo esc_html__( 'Reset', 'rejoyan-store-health' ); ?></a>
 			</form>
 			<?php $this->render_results( $results ); ?>
 		</section>
@@ -45,7 +45,7 @@ trait Admin_Diagnostics {
 	private function render_results( array $results ) {
 		if ( empty( $results ) ) {
 			?>
-			<div class="storecheckup-empty storecheckup-empty-card"><span class="dashicons dashicons-search" aria-hidden="true"></span><h3><?php echo esc_html__( 'No matching diagnostics', 'storecheckup' ); ?></h3><p><?php echo esc_html__( 'Try clearing the filters or using a broader search.', 'storecheckup' ); ?></p></div>
+			<div class="storecheckup-empty storecheckup-empty-card"><span class="dashicons dashicons-search" aria-hidden="true"></span><h3><?php echo esc_html__( 'No matching diagnostics', 'rejoyan-store-health' ); ?></h3><p><?php echo esc_html__( 'Try clearing the filters or using a broader search.', 'rejoyan-store-health' ); ?></p></div>
 			<?php
 			return;
 		}
