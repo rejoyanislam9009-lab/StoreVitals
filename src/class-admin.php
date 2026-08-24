@@ -36,8 +36,8 @@ final class Admin {
 	public function menu() {
 		$this->hook_suffix = add_submenu_page(
 			'woocommerce',
-			__( 'StoreCheckup', 'storecheckup' ),
-			__( 'StoreCheckup', 'storecheckup' ),
+			__( 'Rejoyan Store Health', 'rejoyan-store-health' ),
+			__( 'Rejoyan Store Health', 'rejoyan-store-health' ),
 			'manage_woocommerce',
 			'storecheckup',
 			array( $this, 'render' )
@@ -55,14 +55,14 @@ final class Admin {
 	}
 
 	public function plugin_action_links( $links ) {
-		$dashboard = '<a href="' . esc_url( admin_url( 'admin.php?page=storecheckup' ) ) . '">' . esc_html__( 'Dashboard', 'storecheckup' ) . '</a>';
+		$dashboard = '<a href="' . esc_url( admin_url( 'admin.php?page=storecheckup' ) ) . '">' . esc_html__( 'Dashboard', 'rejoyan-store-health' ) . '</a>';
 		array_unshift( $links, $dashboard );
 		return $links;
 	}
 
 	public function rescan() {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			wp_die( esc_html__( 'You do not have permission to run this scan.', 'storecheckup' ) );
+			wp_die( esc_html__( 'You do not have permission to run this scan.', 'rejoyan-store-health' ) );
 		}
 		check_admin_referer( 'storecheckup_rescan' );
 		$this->scanner->clear_cache();
@@ -73,7 +73,7 @@ final class Admin {
 
 	public function clear_history() {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			wp_die( esc_html__( 'You do not have permission to clear scan history.', 'storecheckup' ) );
+			wp_die( esc_html__( 'You do not have permission to clear scan history.', 'rejoyan-store-health' ) );
 		}
 		check_admin_referer( 'storecheckup_clear_history' );
 		$this->history->clear();
@@ -101,16 +101,16 @@ final class Admin {
 				<?php
 				switch ( $view ) {
 					case 'issues':
-						$this->render_issue_view( $scan, null, __( 'All diagnostics', 'storecheckup' ), __( 'Search and filter every diagnostic result from the current bounded scan.', 'storecheckup' ) );
+						$this->render_issue_view( $scan, null, __( 'All diagnostics', 'rejoyan-store-health' ), __( 'Search and filter every diagnostic result from the current bounded scan.', 'rejoyan-store-health' ) );
 						break;
 					case 'catalog':
-						$this->render_issue_view( $scan, array( 'products', 'inventory' ), __( 'Catalog & inventory', 'storecheckup' ), __( 'Product completeness, variation integrity, stock signals, and bounded catalog quality checks.', 'storecheckup' ) );
+						$this->render_issue_view( $scan, array( 'products', 'inventory' ), __( 'Catalog & inventory', 'rejoyan-store-health' ), __( 'Product completeness, variation integrity, stock signals, and bounded catalog quality checks.', 'rejoyan-store-health' ) );
 						break;
 					case 'operations':
-						$this->render_issue_view( $scan, array( 'orders', 'checkout', 'payments', 'shipping' ), __( 'Store operations', 'storecheckup' ), __( 'Order states, checkout configuration, gateways, shipping, HPOS, and operational background tasks.', 'storecheckup' ) );
+						$this->render_issue_view( $scan, array( 'orders', 'checkout', 'payments', 'shipping' ), __( 'Store operations', 'rejoyan-store-health' ), __( 'Order states, checkout configuration, gateways, shipping, HPOS, and operational background tasks.', 'rejoyan-store-health' ) );
 						break;
 					case 'system':
-						$this->render_issue_view( $scan, array( 'system', 'store' ), __( 'System & configuration', 'storecheckup' ), __( 'WordPress, WooCommerce, runtime, email, store configuration, cron, and environment diagnostics.', 'storecheckup' ) );
+						$this->render_issue_view( $scan, array( 'system', 'store' ), __( 'System & configuration', 'rejoyan-store-health' ), __( 'WordPress, WooCommerce, runtime, email, store configuration, cron, and environment diagnostics.', 'rejoyan-store-health' ) );
 						break;
 					case 'history':
 						$this->render_history();
