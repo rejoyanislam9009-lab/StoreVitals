@@ -1,6 +1,6 @@
 === Flow Store Check for WooCommerce ===
 Contributors: rejoyan9009
-Tags: woocommerce, store health, diagnostics, inventory, checkout
+Tags: woocommerce, health check, diagnostics, inventory, checkout
 Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -8,17 +8,19 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Read-only store health diagnostics for WooCommerce catalog, inventory, checkout, orders, payments, shipping, email, and system configuration.
+WooCommerce store health check and diagnostics for catalog, inventory, checkout, orders, payments, shipping, email, and system configuration.
 
 == Description ==
 
-Flow Store Check gives WooCommerce store managers a focused, read-only health dashboard. It highlights high-value configuration and operational signals without automatically changing products, orders, stock, payments, shipping, or customer data.
+Flow Store Check gives WooCommerce store managers a focused, read-only store health check and diagnostics dashboard. It helps identify high-value catalog, inventory, checkout, order, payment, shipping, email, and system configuration signals without automatically changing store data.
+
+Use Flow Store Check when you want a quick WooCommerce health overview, detailed diagnostic findings, inventory and checkout checks, order-state summaries, system signals, and exportable reports from one admin screen.
 
 Flow Store Check is an independent extension for WooCommerce and is not affiliated with or endorsed by WooCommerce.
 
 Current diagnostic areas include:
 
-* Overall store health score and per-area scores.
+* Overall WooCommerce store health score and per-area scores.
 * Product price, image, category, SKU, short-description, downloadable-file, external-product URL, and variation checks.
 * Inventory low-stock, negative-stock, out-of-stock, backorder, and stock-management signals.
 * Cart, Checkout, My Account, endpoint, guest-checkout, payment, and shipping configuration.
@@ -45,11 +47,15 @@ Flow Store Check does not send telemetry or scan data to an external service.
 
 == Screenshots ==
 
-1. Overview dashboard with the overall store health score, status summary, and per-area health scores.
-2. Diagnostics screen with search, status and area filters, and read-only findings.
-3. Reports screen with CSV, JSON, and print/PDF export options plus the current snapshot preview.
+1. Overview dashboard — overall WooCommerce store health score, Critical/Warning/Passed/Info summary, and per-area scores for products, inventory, orders, checkout, payments, shipping, system, and store configuration.
+2. Diagnostics — searchable and filterable read-only findings with severity, affected area, concise explanation, and a direct Review action where available.
+3. Reports — CSV and JSON downloads plus print/Save PDF, with a current health snapshot and area-score preview for sharing or internal review.
 
 == Frequently Asked Questions ==
+
+= What does Flow Store Check check in WooCommerce? =
+
+It checks store-health signals across products, variations, inventory, checkout, payments, shipping, transactional email, order states, HPOS, Action Scheduler, and the WordPress/PHP/WooCommerce environment.
 
 = Does Flow Store Check change my store data? =
 
