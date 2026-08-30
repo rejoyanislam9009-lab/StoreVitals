@@ -43,6 +43,12 @@ Flow Store Check does not send telemetry or scan data to an external service.
 5. Review Overview, Diagnostics, Catalog, Operations, System, History, and Reports.
 6. Use Run fresh scan when you want to bypass the short-lived local scan cache.
 
+== Screenshots ==
+
+1. Overview dashboard with the overall store health score, status summary, and per-area health scores.
+2. Diagnostics screen with search, status and area filters, and read-only findings.
+3. Reports screen with CSV, JSON, and print/PDF export options plus the current snapshot preview.
+
 == Frequently Asked Questions ==
 
 = Does Flow Store Check change my store data? =

@@ -1,0 +1,43 @@
+name: Check WordPress.org SVN access
+
+on:
+  push:
+    branches:
+      - "release/wporg-1.0.0"
+
+permissions:
+  contents: read
+
+env:
+  SVN_URL: https://plugins.svn.wordpress.org/flow-store-check
+
+jobs:
+  check-svn-access:
+    runs-on: ubuntu-latest
+    env:
+      SVN_USERNAME: ${{ secrets.WPORG_SVN_USERNAME || 'rejoyan9009' }}
+      SVN_PASSWORD: ${{ secrets.WPORG_SVN_PASSWORD || secrets.SVN_PASSWORD }}
+    steps:
+      - name: Install Subversion
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y subversion
+      - name: Verify configured secret exists
+        run: |
+          if [ -z "${SVN_PASSWORD}" ]; then
+            echo "::error::No SVN password secret found. Set WPORG_SVN_PASSWORD or SVN_PASSWORD."
+            exit 1
+          fi
+      - name: Verify read-only authenticated SVN access
+        run: |
+          svn info "${SVN_URL}" \
+            --username "${SVN_USERNAME}" \
+            --password "${SVN_PASSWORD}" \
+            --non-interactive \
+            --no-auth-cache >/dev/null
+          svn ls "${SVN_URL}" \
+            --username "${SVN_USERNAME}" \
+            --password "${SVN_PASSWORD}" \
+            --non-interactive \
+            --no-auth-cache
+          echo "Authenticated SVN access verified for ${SVN_USERNAME}. No SVN changes were made."

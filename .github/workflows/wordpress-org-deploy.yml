@@ -1,0 +1,164 @@
+name: Publish WordPress.org 1.0.0
+
+on:
+  push:
+    branches:
+      - "publish/wporg-1.0.0"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wordpress-org-flow-store-check-1.0.0
+  cancel-in-progress: false
+
+env:
+  PLUGIN_SLUG: flow-store-check
+  RELEASE_VERSION: 1.0.0
+  SVN_URL: https://plugins.svn.wordpress.org/flow-store-check
+
+jobs:
+  publish-wordpress-org:
+    if: github.ref == 'refs/heads/publish/wporg-1.0.0'
+    runs-on: ubuntu-latest
+    env:
+      SVN_USERNAME: ${{ secrets.WPORG_SVN_USERNAME || 'rejoyan9009' }}
+      SVN_PASSWORD: ${{ secrets.WPORG_SVN_PASSWORD || secrets.SVN_PASSWORD }}
+
+    steps:
+      - name: Checkout approved Git source
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+
+      - name: Install release tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y subversion rsync fonts-dejavu-core
+          python3 -m pip install --disable-pip-version-check pillow
+
+      - name: Build WordPress.org plugin package
+        run: |
+          rm -rf build/plugin build/wporg-assets
+          mkdir -p "build/plugin/${PLUGIN_SLUG}"
+          cp flow-store-check.php uninstall.php readme.txt LICENSE "build/plugin/${PLUGIN_SLUG}/"
+          cp -R assets src languages "build/plugin/${PLUGIN_SLUG}/"
+
+      - name: Validate release metadata and PHP syntax
+        run: |
+          grep -F "Plugin Name:       Flow Store Check for WooCommerce" flow-store-check.php
+          grep -F "Version:           ${RELEASE_VERSION}" flow-store-check.php
+          grep -F "Text Domain:       ${PLUGIN_SLUG}" flow-store-check.php
+          grep -F "Stable tag: ${RELEASE_VERSION}" readme.txt
+          grep -F "=== Flow Store Check for WooCommerce ===" readme.txt
+          if grep -R -n -E "Rejoyan Store Health|rejoyan-store-health" "build/plugin/${PLUGIN_SLUG}"; then
+            echo "::error::Previous public plugin branding remains in the release package."
+            exit 1
+          fi
+          find "build/plugin/${PLUGIN_SLUG}" -type f -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      - name: Official WordPress Plugin Check
+        uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: ./build/plugin/flow-store-check
+
+      - name: Generate WordPress.org directory assets
+        run: |
+          python3 tools/build-wporg-assets.py --output build/wporg-assets
+          python3 tools/build-wporg-branding.py --output build/wporg-assets
+
+      - name: Validate WordPress.org directory assets
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          root = Path('build/wporg-assets')
+          expected = {
+              'icon-128x128.png': (128, 128),
+              'icon-256x256.png': (256, 256),
+              'banner-772x250.png': (772, 250),
+              'banner-1544x500.png': (1544, 500),
+              'screenshot-1.png': (1280, 800),
+              'screenshot-2.png': (1280, 800),
+              'screenshot-3.png': (1280, 800),
+          }
+          for name, size in expected.items():
+              path = root / name
+              if not path.is_file():
+                  raise SystemExit(f'Missing WordPress.org asset: {name}')
+              with Image.open(path) as image:
+                  if image.size != size:
+                      raise SystemExit(f'{name} has {image.size}, expected {size}')
+          print('WordPress.org asset dimensions validated.')
+          PY
+
+      - name: Verify SVN credentials and release state
+        run: |
+          if [ -z "${SVN_PASSWORD}" ]; then
+            echo "::error::Missing SVN password. Set WPORG_SVN_PASSWORD or SVN_PASSWORD in GitHub Actions secrets."
+            exit 1
+          fi
+          svn info "${SVN_URL}" \
+            --username "${SVN_USERNAME}" \
+            --password "${SVN_PASSWORD}" \
+            --non-interactive \
+            --no-auth-cache >/dev/null
+          if svn ls "${SVN_URL}/tags/${RELEASE_VERSION}" \
+            --username "${SVN_USERNAME}" \
+            --password "${SVN_PASSWORD}" \
+            --non-interactive \
+            --no-auth-cache >/dev/null 2>&1; then
+            echo "::error::SVN tag ${RELEASE_VERSION} already exists. Refusing to overwrite an immutable release tag."
+            exit 1
+          fi
+
+      - name: Checkout WordPress.org SVN
+        run: |
+          svn checkout "${SVN_URL}" svn \
+            --username "${SVN_USERNAME}" \
+            --password "${SVN_PASSWORD}" \
+            --non-interactive \
+            --no-auth-cache
+
+      - name: Stage trunk and directory assets
+        shell: bash
+        run: |
+          mkdir -p svn/trunk svn/assets svn/tags
+          rsync -a --delete "build/plugin/${PLUGIN_SLUG}/" svn/trunk/
+          rsync -a --delete build/wporg-assets/ svn/assets/
+          svn add --force svn/trunk svn/assets >/dev/null
+          while IFS= read -r line; do
+            if [ "${line:0:1}" = "!" ]; then
+              svn rm --force "${line:8}"
+            fi
+          done < <(svn status svn/trunk svn/assets)
+          echo "SVN changes prepared:"
+          svn status svn/trunk svn/assets
+
+      - name: Commit trunk and directory assets
+        run: |
+          svn commit svn/trunk svn/assets \
+            -m "Release Flow Store Check ${RELEASE_VERSION}" \
+            --username "${SVN_USERNAME}" \
+            --password "${SVN_PASSWORD}" \
+            --non-interactive \
+            --no-auth-cache
+
+      - name: Create immutable release tag
+        run: |
+          svn copy "${SVN_URL}/trunk" "${SVN_URL}/tags/${RELEASE_VERSION}" \
+            -m "Tag Flow Store Check ${RELEASE_VERSION}" \
+            --username "${SVN_USERNAME}" \
+            --password "${SVN_PASSWORD}" \
+            --non-interactive \
+            --no-auth-cache
+
+      - name: Publication summary
+        run: |
+          echo "Published Flow Store Check ${RELEASE_VERSION} to WordPress.org SVN."
+          echo "Directory: https://wordpress.org/plugins/${PLUGIN_SLUG}/"
