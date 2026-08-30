@@ -67,7 +67,9 @@ jobs:
           build-dir: ./build/plugin/flow-store-check
 
       - name: Generate WordPress.org directory assets
-        run: python3 tools/build-wporg-assets.py --output build/wporg-assets
+        run: |
+          python3 tools/build-wporg-assets.py --output build/wporg-assets
+          python3 tools/build-wporg-branding.py --output build/wporg-assets
 
       - name: Validate WordPress.org directory assets
         run: |
