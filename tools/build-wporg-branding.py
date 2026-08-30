@@ -6,15 +6,12 @@ import argparse
 from PIL import Image, ImageDraw, ImageFont
 
 DEEP = "#0b1020"
-NAVY = "#111827"
-INDIGO = "#4f46e5"
+INDIGO = "#4338ca"
 VIOLET = "#7c3aed"
 CYAN = "#38bdf8"
 MINT = "#6ee7b7"
 WHITE = "#ffffff"
 SOFT = "#cbd5e1"
-GLASS = (255, 255, 255, 22)
-GLASS_BORDER = (255, 255, 255, 50)
 FONT_REGULAR = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 FONT_BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 
@@ -47,63 +44,83 @@ def text(draw, xy, value, size, bold=False, fill=WHITE, anchor=None):
 
 
 def brand_icon(size):
-    image = horizontal_gradient((size, size), DEEP, INDIGO).convert("RGBA")
+    """Flow + store + check mark, optimized for WordPress.org 128/256px cards."""
+    background = horizontal_gradient((size, size), DEEP, INDIGO).convert("RGBA")
     mask = Image.new("L", (size, size), 0)
     ImageDraw.Draw(mask).rounded_rectangle(
-        (0, 0, size - 1, size - 1), radius=int(size * .235), fill=255
+        (0, 0, size - 1, size - 1), radius=int(size * .23), fill=255
     )
-    rounded = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    rounded.paste(image, (0, 0), mask)
-    image = rounded
+    image = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    image.paste(background, (0, 0), mask)
     draw = ImageDraw.Draw(image)
 
-    # Soft branded glows.
+    # Soft depth without visual clutter.
     draw.ellipse(
-        (-int(size * .25), -int(size * .18), int(size * .72), int(size * .78)),
-        fill=(56, 189, 248, 23),
+        (-int(size * .26), -int(size * .20), int(size * .76), int(size * .82)),
+        fill=(56, 189, 248, 24),
     )
     draw.ellipse(
-        (int(size * .38), int(size * .22), int(size * 1.18), int(size * 1.06)),
+        (int(size * .45), int(size * .34), int(size * 1.16), int(size * 1.08)),
         fill=(124, 58, 237, 48),
     )
 
-    # Stylized F: strong enough to remain recognizable at 128px.
-    stroke = max(6, int(size * .09))
-    x = int(size * .29)
-    y1 = int(size * .24)
-    y2 = int(size * .73)
-    draw.line((x, y1, x, y2), fill=WHITE, width=stroke)
-    draw.line((x, y1, int(size * .67), y1), fill=WHITE, width=stroke)
-    draw.line((x, int(size * .46), int(size * .57), int(size * .46)), fill=WHITE, width=stroke)
-
-    # Flow ribbon cutting through the mark.
-    ribbon = [
-        (int(size * .18), int(size * .67)),
-        (int(size * .30), int(size * .62)),
-        (int(size * .43), int(size * .61)),
-        (int(size * .56), int(size * .55)),
-        (int(size * .69), int(size * .42)),
-        (int(size * .79), int(size * .31)),
-    ]
-    draw.line(ribbon, fill=CYAN, width=max(4, int(size * .042)), joint="curve")
-
-    # Health/check badge.
-    badge_box = (
-        int(size * .56), int(size * .56), int(size * .84), int(size * .84)
+    # Flow ring around the store symbol.
+    ring_box = (
+        int(size * .17), int(size * .16), int(size * .83), int(size * .82)
     )
-    draw.ellipse(badge_box, fill=(16, 24, 40, 235), outline=(110, 231, 183, 235), width=max(2, int(size * .018)))
-    check = [
-        (int(size * .62), int(size * .70)),
-        (int(size * .68), int(size * .76)),
-        (int(size * .78), int(size * .64)),
-    ]
-    draw.line(check, fill=MINT, width=max(4, int(size * .045)), joint="curve")
+    ring_width = max(5, int(size * .045))
+    draw.arc(ring_box, start=205, end=350, fill=CYAN, width=ring_width)
+    draw.arc(ring_box, start=20, end=155, fill="#a78bfa", width=ring_width)
 
-    # Very subtle outline to stay crisp on white WordPress.org cards.
+    # Direction cue at the end of the cyan flow.
+    arrow = [
+        (int(size * .78), int(size * .38)),
+        (int(size * .84), int(size * .31)),
+        (int(size * .76), int(size * .30)),
+    ]
+    draw.polygon(arrow, fill=CYAN)
+
+    # Minimal shopping bag = Store.
+    bag_box = (
+        int(size * .31), int(size * .35), int(size * .69), int(size * .69)
+    )
+    bag_width = max(4, int(size * .042))
+    draw.rounded_rectangle(
+        bag_box,
+        radius=int(size * .045),
+        fill=(15, 23, 42, 185),
+        outline=WHITE,
+        width=bag_width,
+    )
+    handle_box = (
+        int(size * .39), int(size * .25), int(size * .61), int(size * .45)
+    )
+    draw.arc(
+        handle_box,
+        start=190,
+        end=350,
+        fill=WHITE,
+        width=max(4, int(size * .038)),
+    )
+
+    # Health check = Check.
+    check = [
+        (int(size * .40), int(size * .54)),
+        (int(size * .48), int(size * .62)),
+        (int(size * .62), int(size * .46)),
+    ]
+    draw.line(
+        check,
+        fill=MINT,
+        width=max(5, int(size * .052)),
+        joint="curve",
+    )
+
+    # Crisp edge on light WordPress.org cards.
     draw.rounded_rectangle(
         (1, 1, size - 2, size - 2),
-        radius=int(size * .235),
-        outline=(255, 255, 255, 28),
+        radius=int(size * .23),
+        outline=(255, 255, 255, 26),
         width=max(1, int(size * .008)),
     )
     return image
@@ -113,31 +130,37 @@ def banner(width, height):
     image = horizontal_gradient((width, height), DEEP, "#312e81").convert("RGBA")
     draw = ImageDraw.Draw(image)
 
-    # Background depth and fine grid.
     draw.ellipse(
         (int(width * .56), -int(height * .72), int(width * 1.04), int(height * 1.12)),
-        fill=(79, 70, 229, 50),
+        fill=(79, 70, 229, 48),
     )
     draw.ellipse(
-        (int(width * .76), int(height * .20), int(width * 1.12), int(height * 1.25)),
-        fill=(56, 189, 248, 25),
+        (int(width * .78), int(height * .22), int(width * 1.12), int(height * 1.25)),
+        fill=(56, 189, 248, 24),
     )
+
     grid = max(22, int(height * .14))
     for x in range(0, width, grid):
-        draw.line((x, 0, x, height), fill=(255, 255, 255, 8), width=1)
+        draw.line((x, 0, x, height), fill=(255, 255, 255, 7), width=1)
     for y in range(0, height, grid):
-        draw.line((0, y, width, y), fill=(255, 255, 255, 8), width=1)
+        draw.line((0, y, width, y), fill=(255, 255, 255, 7), width=1)
 
-    # Left brand block.
-    icon_size = int(height * .48)
+    icon_size = int(height * .50)
     icon_x = int(width * .045)
-    icon_y = int(height * .18)
+    icon_y = int(height * .17)
     image.alpha_composite(brand_icon(icon_size), (icon_x, icon_y))
 
     content_x = icon_x + icon_size + int(width * .028)
-    text(draw, (content_x, int(height * .17)), "Flow Store Check", int(height * .102), True)
+    text(draw, (content_x, int(height * .17)), "Flow Store Check", int(height * .10), True)
     text(draw, (content_x, int(height * .315)), "for WooCommerce", int(height * .047), True, CYAN)
-    text(draw, (content_x, int(height * .465)), "Know what needs attention before it becomes a problem.", int(height * .034), False, SOFT)
+    text(
+        draw,
+        (content_x, int(height * .465)),
+        "A clear health check for your WooCommerce store.",
+        int(height * .034),
+        False,
+        SOFT,
+    )
 
     pill_y = int(height * .64)
     pill_x = content_x
@@ -148,7 +171,7 @@ def banner(width, height):
             (pill_x, pill_y, pill_x + pill_width, pill_y + int(height * .095)),
             radius=int(height * .048),
             fill=(255, 255, 255, 14),
-            outline=(255, 255, 255, 40),
+            outline=(255, 255, 255, 38),
             width=1,
         )
         text(
@@ -161,7 +184,7 @@ def banner(width, height):
         )
         pill_x += pill_width + int(height * .024)
 
-    # Right glass dashboard card.
+    # Right-side store health card.
     card_width = int(width * .285)
     x2 = width - int(width * .04)
     x1 = x2 - card_width
@@ -170,8 +193,8 @@ def banner(width, height):
     draw.rounded_rectangle(
         (x1, y1, x2, y2),
         radius=int(height * .055),
-        fill=GLASS,
-        outline=GLASS_BORDER,
+        fill=(255, 255, 255, 22),
+        outline=(255, 255, 255, 50),
         width=max(1, int(height * .004)),
     )
 
