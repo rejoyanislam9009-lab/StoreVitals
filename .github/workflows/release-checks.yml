@@ -7,6 +7,7 @@ on:
       - "release/**"
       - "feature/**"
       - "fix/**"
+      - "prep/**"
 
 permissions:
   contents: read
@@ -64,6 +65,7 @@ jobs:
         run: |
           python3 tools/build-wporg-assets.py --output build/wporg-assets
           python3 tools/build-wporg-branding.py --output build/wporg-assets
+          python3 tools/annotate-wporg-screenshots.py --directory build/wporg-assets
       - name: Validate asset names and dimensions
         run: |
           python3 - <<'PY'
@@ -92,7 +94,7 @@ jobs:
       - name: Upload WordPress.org asset preview artifact
         uses: actions/upload-artifact@v4
         with:
-          name: flow-store-check-wporg-assets
+          name: flow-store-check-wporg-presentation-preview
           path: build/wporg-assets/
           if-no-files-found: error
           retention-days: 14
